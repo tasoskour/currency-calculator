@@ -5,7 +5,9 @@ class CreateButton extends Component {
 constructor(){
 super();
 this.state={
-  currency:{name:"Marko"},
+  currency:{baseCur:" ",
+            targetCur:" ",
+            rate:null}
 }
 
 this.create=this.create.bind(this)

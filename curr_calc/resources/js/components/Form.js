@@ -6,6 +6,8 @@ constructor(){
 super();
 
 this.state={
+  value:null,
+  result:null,
 currencies:[],
 tCurrencies:[],
 bCurrency:"Euro",
@@ -19,6 +21,7 @@ this.handleBaseCurrSelection=this.handleBaseCurrSelection.bind(this);
 this.handleTargetCurrSelection=this.handleTargetCurrSelection.bind(this);
 this.getExchangeRate=this.getExchangeRate.bind(this);
 this.getTargetCurrency=this.getTargetCurrency.bind(this);
+this.inputHandler=this.inputHandler.bind(this);
 }
 
 componentDidMount(){
@@ -30,14 +33,14 @@ componentDidMount(){
     .then(currencies => {
            console.log("DATA:"+currencies[0]);
             //Fetched currencies are stored in the state
-            this.setState({ currencies:currencies,bCurrency:currencies[0].name,fetchTarget:true});
+            this.setState({ currencies:currencies,bCurrency:currencies[0].baseCur,fetchTarget:true});
     })
     .catch(error => {
       console.log("Error:"+error);
     });
 }
 
-componentDidUpdate(){
+componentDidUpdate(prevState){
 this.getExchangeRate();
 this.getTargetCurrency();
 }
@@ -85,18 +88,22 @@ this.setState({tCurrency:e.target.value,fetchRate:true});
 console.log(this.state.tCurrency);
 }
 
+inputHandler(e){
+let result=this.state.rate*e.target.value
+this.setState({result:result,value:e.target.value})
+}
 
 render() {
 /*Option for every different currency using map*/
-var bDropDownCur=this.state.currencies.map((currency)=><option key={currency.id} value={currency.name}>{currency.name}</option>)
+var bDropDownCur=this.state.currencies.map((currency)=><option key={currency.baseCur} value={currency.baseCur}>{currency.baseCur}</option>)
 var tDropDownCur=this.state.tCurrencies.map((currency)=><option key={currency.id} value={currency.targetCur}>{currency.targetCur}</option>)
 
 return(
   <div>
   <form>
   {/*Input for the amount which will be converted*/}
-  <input  type="number" step="0.00001"/>
-
+  <input  onChange={this.inputHandler} type="number" step="0.01"/>
+    <output onChange={this.inputHandler}>{this.state.rate}</output>
   {/*Dropdown list for the base currency*/}
   <select onChange={this.handleBaseCurrSelection}>
    {bDropDownCur}
@@ -106,7 +113,8 @@ return(
   <select id="target" onChange={this.handleTargetCurrSelection}>
     {tDropDownCur}
   </select>
-  {this.state.rate}
+
+  <output >{this.state.result}</output>
   </form>
   </div>
 );}
