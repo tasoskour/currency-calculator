@@ -69102,12 +69102,17 @@ function (_Component) {
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Form).call(this));
     _this.state = {
       currencies: [],
-      bCurrency: "",
+      tCurrencies: [],
+      bCurrency: "Euro",
       tCurrency: "",
-      rate: null
+      rate: null,
+      fetchTarget: false,
+      fetchRate: false
     };
     _this.handleBaseCurrSelection = _this.handleBaseCurrSelection.bind(_assertThisInitialized(_this));
     _this.handleTargetCurrSelection = _this.handleTargetCurrSelection.bind(_assertThisInitialized(_this));
+    _this.getExchangeRate = _this.getExchangeRate.bind(_assertThisInitialized(_this));
+    _this.getTargetCurrency = _this.getTargetCurrency.bind(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -69120,30 +69125,79 @@ function (_Component) {
       fetch("/api/baseCurrency").then(function (response) {
         return response.json();
       }).then(function (currencies) {
-        //Fetched currencies are stored in the state
+        console.log("DATA:" + currencies[0]); //Fetched currencies are stored in the state
+
         _this2.setState({
-          currencies: currencies
+          currencies: currencies,
+          bCurrency: currencies[0].name,
+          fetchTarget: true
         });
       })["catch"](function (error) {
-        console.log(error);
+        console.log("Error:" + error);
       });
+    }
+  }, {
+    key: "componentDidUpdate",
+    value: function componentDidUpdate() {
+      this.getExchangeRate();
+      this.getTargetCurrency();
+    }
+  }, {
+    key: "getTargetCurrency",
+    value: function getTargetCurrency() {
+      var _this3 = this;
+
+      if (this.state.fetchTarget === true) {
+        fetch("/api/targetCurrency/" + this.state.bCurrency).then(function (response) {
+          return response.json();
+        }).then(function (tCurr) {
+          _this3.setState({
+            tCurrencies: tCurr,
+            tCurrency: tCurr[0].targetCur,
+            fetchTarget: false,
+            fetchRate: true
+          });
+        })["catch"](function (error) {
+          console.log("Error:" + error);
+        });
+      }
+    }
+  }, {
+    key: "getExchangeRate",
+    value: function getExchangeRate() {
+      var _this4 = this;
+
+      if (this.state.fetchRate === true) {
+        console.log("FIND");
+        fetch("/api/exrates/" + this.state.bCurrency + "/" + this.state.tCurrency).then(function (response) {
+          console.log(response);
+          return response.json();
+        }).then(function (exrate) {
+          _this4.setState({
+            rate: exrate.rate,
+            fetchRate: false
+          });
+        })["catch"](function (error) {
+          console.log("Error:" + error);
+        });
+      }
     }
   }, {
     key: "handleBaseCurrSelection",
     value: function handleBaseCurrSelection(e) {
       this.setState({
-        bCurrency: e.target.value
+        bCurrency: e.target.value,
+        fetchTarget: true
       });
       console.log(this.state.bCurrency);
-      /*if(this.state.bCurrency===this.state.tCurrency){
-      this.setState(prevState => ({tCurrency:prevState.bCurrency}));
-      }*/
+      console.log(this.state.rate);
     }
   }, {
     key: "handleTargetCurrSelection",
     value: function handleTargetCurrSelection(e) {
       this.setState({
-        tCurrency: e.target.value
+        tCurrency: e.target.value,
+        fetchRate: true
       });
       console.log(this.state.tCurrency);
     }
@@ -69151,21 +69205,27 @@ function (_Component) {
     key: "render",
     value: function render() {
       /*Option for every different currency using map*/
-      var dropDownCur = this.state.currencies.map(function (currency) {
+      var bDropDownCur = this.state.currencies.map(function (currency) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
           key: currency.id,
           value: currency.name
         }, currency.name);
+      });
+      var tDropDownCur = this.state.tCurrencies.map(function (currency) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+          key: currency.id,
+          value: currency.targetCur
+        }, currency.targetCur);
       });
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         type: "number",
         step: "0.00001"
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
         onChange: this.handleBaseCurrSelection
-      }, dropDownCur), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
+      }, bDropDownCur), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
         id: "target",
         onChange: this.handleTargetCurrSelection
-      }, dropDownCur)));
+      }, tDropDownCur), this.state.rate));
     }
   }]);
 

@@ -16,8 +16,10 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-//Get all currencies names
+//Get all currencies
 Route::get("/baseCurrency","CurrenciesController@getBaseCurrency");
+//Get all target currencies that exist in db for the base currency
+Route::get("/targetCurrency/{b_c}","CurrenciesController@getTargetCurrency");
 //Get exchange rate for base currency and target currency
 Route::get("/exrates/{b_c}/{t_c}","CurrenciesController@getExchangeRate");
 //Create new exchange rate and currency
