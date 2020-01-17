@@ -1,16 +1,22 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import {BrowserRouter as Router, Link, Route} from 'react-router-dom';
 import Form from "./Form";
-import CreateButton from "./CreateButton";
+import CreateExchange from "./CreateExchange";
 
 /* The main React component */
 class Main extends Component {
     render() {
         return (
+
+            <Router>
             <div>
-                <Form />
-                <CreateButton/>
-            </div>
+              <Link to="/">Home</Link>
+                <Route exact path="/" component={Form} />
+                <Route exact path="/create" component={CreateExchange} />
+                </div>
+            </Router>
+
         );
     }
 }

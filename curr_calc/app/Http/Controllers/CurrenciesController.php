@@ -22,15 +22,14 @@ public function getTargetCurrencies($b_c){
 
 //Create new exchange rate and currency
 public function ExchangeRateCreate(Request $request){
-  $this->validate($request, [
+/*  $this->validate($request, [
   'baseCur' => 'required|unique:products|max:255',
   'targetCur' => 'required',
   'rate' => 'integer'
 
-]);
+]);*/
   $exrate = ExchangeRate::create($request->all());
         return response()->json($exrate, 201);
+
 }
-
-
 }

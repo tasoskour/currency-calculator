@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {Redirect} from 'react-router-dom';
 
 class Form extends Component{
 
@@ -21,6 +22,8 @@ this.handleBaseCurrSelection=this.handleBaseCurrSelection.bind(this);
 this.handleTargetCurrSelection=this.handleTargetCurrSelection.bind(this);
 this.getTargetCurrency=this.getTargetCurrency.bind(this);
 this.inputHandler=this.inputHandler.bind(this);
+this.redirectToCreate=this.redirectToCreate.bind(this);
+
 }
 
 componentDidMount(){
@@ -89,8 +92,15 @@ console.log(this.state.tCurrency);
 }
 
 inputHandler(e){
+  e.preventDefault();
 let result=this.state.rate*e.target.value
 this.setState({result:result,value:e.target.value})
+}
+
+redirectToCreate(e){
+e.preventDefault();
+  this.props.history.push('/create/');
+
 }
 
 render() {
@@ -102,7 +112,7 @@ return(
   <div>
   <form>
   {/*Input for the amount which will be converted*/}
-  <input  onChange={this.inputHandler} type="number" step="0.01"/>
+  <input  onChange={this.inputHandler} type="number" />
     <output onChange={this.inputHandler}>{this.state.rate}</output>
   {/*Dropdown list for the base currency*/}
   <select onChange={this.handleBaseCurrSelection}>
@@ -115,7 +125,11 @@ return(
   </select>
 
   <output >{this.state.result}</output>
+  <br/>
+  <button type="button" onClick={this.redirectToCreate}>Add new currency</button>
+  <button type="button" onClick={this.redirectToCreate}>Edit current</button>
   </form>
+
   </div>
 );}
 
