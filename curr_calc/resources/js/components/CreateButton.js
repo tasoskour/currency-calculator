@@ -35,7 +35,6 @@ var currString=JSON.stringify(this.state.currency);
  .catch(error => {
   console.log(error);
   });
-
 }
 
 render(){

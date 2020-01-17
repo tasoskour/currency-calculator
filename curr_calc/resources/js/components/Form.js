@@ -3,23 +3,22 @@ import React, { Component } from 'react';
 class Form extends Component{
 
 constructor(){
-super();
+  super();
 
-this.state={
-  value:null,
-  result:null,
-currencies:[],
-tCurrencies:[],
-bCurrency:"Euro",
-tCurrency:"",
-rate:null,
-fetchTarget:false,
-fetchRate:false,
-}
+  this.state={
+    value:null,
+    result:null,
+    currencies:[],
+    tCurrencies:[],
+    bCurrency:"",
+    tCurrency:"",
+    rate:null,
+    fetchTarget:false,
+    rateChanged:false,
+  }
 
 this.handleBaseCurrSelection=this.handleBaseCurrSelection.bind(this);
 this.handleTargetCurrSelection=this.handleTargetCurrSelection.bind(this);
-this.getExchangeRate=this.getExchangeRate.bind(this);
 this.getTargetCurrency=this.getTargetCurrency.bind(this);
 this.inputHandler=this.inputHandler.bind(this);
 }
@@ -36,13 +35,16 @@ componentDidMount(){
             this.setState({ currencies:currencies,bCurrency:currencies[0].baseCur,fetchTarget:true});
     })
     .catch(error => {
-      console.log("Error:"+error);
+      console.log("Error1:"+error);
     });
 }
 
 componentDidUpdate(prevState){
-this.getExchangeRate();
-this.getTargetCurrency();
+    this.getTargetCurrency();
+    if(this.state.rateChanged){
+      let result=this.state.rate*this.state.value
+      this.setState({result:result,rateChanged:false})
+    }
 }
 
 getTargetCurrency(){
@@ -51,40 +53,38 @@ getTargetCurrency(){
    .then(response => {
         return response.json();
           })
-          .then(tCurr => {
-              this.setState({ tCurrencies:tCurr,tCurrency:tCurr[0].targetCur,fetchTarget:false,fetchRate:true});
+   .then(tCurr => {
+              this.setState({ tCurrencies:tCurr,
+                              tCurrency:tCurr[0].targetCur,
+                              rate:tCurr[0].rate,
+                              fetchTarget:false,
+                              rateChanged:true});
           })
           .catch(error => {
-         console.log("Error:"+error);
-       });
-}}
-getExchangeRate(){
-
-    if(this.state.fetchRate===true){
-      console.log("FIND");
-    fetch("/api/exrates/"+this.state.bCurrency+"/"+this.state.tCurrency)
-     .then(response => {
-       console.log(response);
-          return response.json();
-        })
-      .then(exrate => {
-                this.setState({ rate:exrate.rate,fetchRate:false});
-        })
-      .catch(error => {
-           console.log("Error:"+error);
-          });
-  }
-
+         console.log("Error2:"+error);});
+       }
 }
-handleBaseCurrSelection(e){
 
+
+handleBaseCurrSelection(e){
+e.preventDefault();
 this.setState({bCurrency:e.target.value,fetchTarget:true});
 console.log(this.state.bCurrency);
 console.log(this.state.rate);
 }
 
 handleTargetCurrSelection(e){
-this.setState({tCurrency:e.target.value,fetchRate:true});
+  var opts = document.getElementById("target").options;
+  var index=null;
+for(var i = 0; i < opts.length; i++) {
+    if(opts[i].innerText === e.target.value) {
+      index=i;
+        break;
+    }
+}
+this.setState({tCurrency:e.target.value,
+              rate:this.state.tCurrencies[index].rate,
+              rateChanged:true});
 console.log(this.state.tCurrency);
 }
 

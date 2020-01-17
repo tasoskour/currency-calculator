@@ -69107,15 +69107,14 @@ function (_Component) {
       result: null,
       currencies: [],
       tCurrencies: [],
-      bCurrency: "Euro",
+      bCurrency: "",
       tCurrency: "",
       rate: null,
       fetchTarget: false,
-      fetchRate: false
+      rateChanged: false
     };
     _this.handleBaseCurrSelection = _this.handleBaseCurrSelection.bind(_assertThisInitialized(_this));
     _this.handleTargetCurrSelection = _this.handleTargetCurrSelection.bind(_assertThisInitialized(_this));
-    _this.getExchangeRate = _this.getExchangeRate.bind(_assertThisInitialized(_this));
     _this.getTargetCurrency = _this.getTargetCurrency.bind(_assertThisInitialized(_this));
     _this.inputHandler = _this.inputHandler.bind(_assertThisInitialized(_this));
     return _this;
@@ -69138,14 +69137,21 @@ function (_Component) {
           fetchTarget: true
         });
       })["catch"](function (error) {
-        console.log("Error:" + error);
+        console.log("Error1:" + error);
       });
     }
   }, {
     key: "componentDidUpdate",
     value: function componentDidUpdate(prevState) {
-      this.getExchangeRate();
       this.getTargetCurrency();
+
+      if (this.state.rateChanged) {
+        var result = this.state.rate * this.state.value;
+        this.setState({
+          result: result,
+          rateChanged: false
+        });
+      }
     }
   }, {
     key: "getTargetCurrency",
@@ -69159,37 +69165,19 @@ function (_Component) {
           _this3.setState({
             tCurrencies: tCurr,
             tCurrency: tCurr[0].targetCur,
+            rate: tCurr[0].rate,
             fetchTarget: false,
-            fetchRate: true
+            rateChanged: true
           });
         })["catch"](function (error) {
-          console.log("Error:" + error);
-        });
-      }
-    }
-  }, {
-    key: "getExchangeRate",
-    value: function getExchangeRate() {
-      var _this4 = this;
-
-      if (this.state.fetchRate === true) {
-        console.log("FIND");
-        fetch("/api/exrates/" + this.state.bCurrency + "/" + this.state.tCurrency).then(function (response) {
-          console.log(response);
-          return response.json();
-        }).then(function (exrate) {
-          _this4.setState({
-            rate: exrate.rate,
-            fetchRate: false
-          });
-        })["catch"](function (error) {
-          console.log("Error:" + error);
+          console.log("Error2:" + error);
         });
       }
     }
   }, {
     key: "handleBaseCurrSelection",
     value: function handleBaseCurrSelection(e) {
+      e.preventDefault();
       this.setState({
         bCurrency: e.target.value,
         fetchTarget: true
@@ -69200,9 +69188,20 @@ function (_Component) {
   }, {
     key: "handleTargetCurrSelection",
     value: function handleTargetCurrSelection(e) {
+      var opts = document.getElementById("target").options;
+      var index = null;
+
+      for (var i = 0; i < opts.length; i++) {
+        if (opts[i].innerText === e.target.value) {
+          index = i;
+          break;
+        }
+      }
+
       this.setState({
         tCurrency: e.target.value,
-        fetchRate: true
+        rate: this.state.tCurrencies[index].rate,
+        rateChanged: true
       });
       console.log(this.state.tCurrency);
     }

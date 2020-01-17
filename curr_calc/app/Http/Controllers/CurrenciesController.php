@@ -20,13 +20,6 @@ public function getTargetCurrencies($b_c){
        return   response( $tCurrencies,200);
        }
 
-//Get exchange rate for base currency and target currency
-public function getExchangeRate($b_c,$t_c){
-       return    response(ExchangeRate::where([
-                    ['baseCur', $b_c],
-                    ['targetCur',$t_c]
-                ])->first(),200);
-       }
 //Create new exchange rate and currency
 public function ExchangeRateCreate(Request $request){
   $this->validate($request, [
