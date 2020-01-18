@@ -41,6 +41,10 @@ public function update(Request $request,ExchangeRate $exchangeId){
   $exchangeId->update($request->all());
 
           return response()->json($exchangeId, 200);
+}
 
+public function delete(ExchangeRate $exchangeId){
+  $exchangeId->delete();
+          return response()->json($exchangeId, 204);
 }
 }

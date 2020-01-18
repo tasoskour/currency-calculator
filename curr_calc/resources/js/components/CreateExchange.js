@@ -7,7 +7,8 @@ constructor(){
       baseCur:" ",
       targetCur:" ",
       rate:null,
-      reverse:true
+      reverse:true,
+      msg:""
     }
 
     this.create=this.create.bind(this);
@@ -43,7 +44,9 @@ create(){
   //call create again to create the reverse exchange rate
    this.create();
  }
-
+     if(response.status===201){
+       this.setState({msg:"Added successfully"})
+       console.log("Added successfully")}
      return response.json();
  })
  .catch(error => {
@@ -76,6 +79,7 @@ render(){
       <input onChange={this.handleInputEx} name="ExValue" type="number" step="0.00001"/>
       <br/>
       <button type="button" onClick={this.onSubmit}>Submit</button>
+      {this.state.msg}
     </form>
   </div> );
 

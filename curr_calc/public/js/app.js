@@ -73091,7 +73091,8 @@ function (_Component) {
       baseCur: " ",
       targetCur: " ",
       rate: null,
-      reverse: true
+      reverse: true,
+      msg: ""
     };
     _this.create = _this.create.bind(_assertThisInitialized(_this));
     _this.handleInputFrom = _this.handleInputFrom.bind(_assertThisInitialized(_this));
@@ -73134,6 +73135,14 @@ function (_Component) {
 
 
           _this2.create();
+        }
+
+        if (response.status === 201) {
+          _this2.setState({
+            msg: "Added successfully"
+          });
+
+          console.log("Added successfully");
         }
 
         return response.json();
@@ -73190,7 +73199,7 @@ function (_Component) {
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "button",
         onClick: this.onSubmit
-      }, "Submit")));
+      }, "Submit"), this.state.msg));
     }
   }]);
 
@@ -73333,6 +73342,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
 /* harmony import */ var _Form__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Form */ "./resources/js/components/Form.js");
+/* harmony import */ var _funcs_handleTargetCurrSelection__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./funcs/handleTargetCurrSelection */ "./resources/js/components/funcs/handleTargetCurrSelection.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
@@ -73356,6 +73366,7 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
 
 
 
@@ -73390,10 +73401,11 @@ function (_Component) {
       fetchTarget: false,
       rateChanged: false,
       editing: false,
-      msg: ""
+      msg: "",
+      reverse: false
     };
     _this.handleBaseCurrSelection = _this.handleBaseCurrSelection.bind(_assertThisInitialized(_this));
-    _this.handleTargetCurrSelection = _this.handleTargetCurrSelection.bind(_assertThisInitialized(_this));
+    _this.handleTargetCurrSelection = _funcs_handleTargetCurrSelection__WEBPACK_IMPORTED_MODULE_3__["default"].bind(_assertThisInitialized(_this));
     _this.getTargetCurrency = _this.getTargetCurrency.bind(_assertThisInitialized(_this));
     _this.inputHandler = _this.inputHandler.bind(_assertThisInitialized(_this));
     _this.redirectToCreate = _this.redirectToCreate.bind(_assertThisInitialized(_this));
@@ -73403,7 +73415,8 @@ function (_Component) {
     _this.handleBaseCurrencyEdit = _this.handleBaseCurrencyEdit.bind(_assertThisInitialized(_this));
     _this.handleTargetCurrencyEdit = _this.handleTargetCurrencyEdit.bind(_assertThisInitialized(_this));
     _this.getExchangeRate = _this.getExchangeRate.bind(_assertThisInitialized(_this));
-    _this.onCreate = _this.onCreate.bind(_assertThisInitialized(_this));
+    _this.onUpdate = _this.onUpdate.bind(_assertThisInitialized(_this));
+    _this.onDelete = _this.onDelete.bind(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -73475,9 +73488,30 @@ function (_Component) {
       fetch("/api/exrate/" + baseC + "/" + targetC).then(function (response) {
         return response.json();
       }).then(function (data) {
-        _this4.update(data.id);
+        if (_this4.state.reverse) {
+          _this4.setState({
+            reverse: false
+          });
 
-        console.log(data.id);
+          _this4["delete"](data.id);
+
+          console.log("Delete Id:" + data.id);
+          document.getElementById("delete").disabled = true;
+        } else {
+          _this4.update(data.id);
+
+          console.log(data.id);
+
+          _this4.setState({
+            upCurrency: _objectSpread({}, _this4.state.upCurrency, {
+              rate: 1 / _this4.state.upCurrency.rate,
+              baseCur: _this4.state.upCurrency.targetCur,
+              targetCur: _this4.state.upCurrency.baseCur
+            }),
+            tCurrency: _this4.state.upCurrency.baseCur,
+            bCurrency: _this4.state.upCurrency.targetCur
+          });
+        }
       })["catch"](function (error) {
         console.log("Error2:" + error);
       });
@@ -73492,27 +73526,6 @@ function (_Component) {
       });
       console.log(this.state.bCurrency);
       console.log(this.state.rate);
-    }
-  }, {
-    key: "handleTargetCurrSelection",
-    value: function handleTargetCurrSelection(e) {
-      var opts = document.getElementById("target").options;
-      var index = null;
-
-      for (var i = 0; i < opts.length; i++) {
-        if (opts[i].innerText === e.target.value) {
-          index = i;
-          break;
-        }
-      }
-
-      this.setState({
-        tCurrency: e.target.value,
-        rate: this.state.tCurrencies[index].rate,
-        rateChanged: true,
-        index: index
-      });
-      console.log(this.state.tCurrency);
     }
   }, {
     key: "inputHandler",
@@ -73531,9 +73544,28 @@ function (_Component) {
       this.props.history.push('/create/');
     }
   }, {
+    key: "delete",
+    value: function _delete(id) {
+      var _this5 = this;
+
+      fetch('/api/delete/' + id, {
+        method: 'delete'
+      }).then(function (response) {
+        console.log(response.status);
+
+        if (_this5.state.reverse) {
+          _this5.getExchangeRate(_this5.state.tCurrency, _this5.state.bCurrency);
+        }
+
+        return response.json();
+      })["catch"](function (error) {
+        console.log("ErrorDelete:" + error);
+      });
+    }
+  }, {
     key: "update",
     value: function update(id) {
-      var _this5 = this;
+      var _this6 = this;
 
       console.log("Index" + this.state.index);
       var updatedCurrency = JSON.stringify(this.state.upCurrency);
@@ -73547,22 +73579,23 @@ function (_Component) {
         },
         body: updatedCurrency
       }).then(function (response) {
+        console.log(response);
         return response.json();
       }).then(function (data) {
-        if (_this5.state.upCurrency.reverse) {
-          _this5.setState({
-            upCurrency: _objectSpread({}, _this5.state.upCurrency, {
-              rate: 1 / _this5.state.upCurrency.rate,
-              baseCur: _this5.state.upCurrency.targetCur,
-              targetCur: _this5.state.upCurrency.baseCur,
+        if (_this6.state.upCurrency.reverse) {
+          _this6.setState({
+            upCurrency: {
+              rate: 1 / _this6.state.upCurrency.rate,
+              baseCur: _this6.state.upCurrency.targetCur,
+              targetCur: _this6.state.upCurrency.baseCur,
               reverse: false
-            })
+            }
           });
 
-          _this5.getExchangeRate(_this5.state.tCurrency, _this5.state.bCurrency);
+          _this6.getExchangeRate(_this6.state.tCurrency, _this6.state.bCurrency);
         }
-
-        console.log(data);
+      })["catch"](function (error) {
+        console.log("ErrorUpdate:" + error);
       });
     }
   }, {
@@ -73618,8 +73651,8 @@ function (_Component) {
       }
     }
   }, {
-    key: "onCreate",
-    value: function onCreate(e) {
+    key: "onUpdate",
+    value: function onUpdate(e) {
       e.preventDefault();
       this.setState({
         upCurrency: _objectSpread({}, this.state.upCurrency, {
@@ -73627,6 +73660,16 @@ function (_Component) {
         })
       });
       this.update(this.state.tCurrencies[this.state.index].id);
+      console.log("create");
+    }
+  }, {
+    key: "onDelete",
+    value: function onDelete(e) {
+      e.preventDefault();
+      this.setState({
+        reverse: true
+      });
+      this["delete"](this.state.tCurrencies[this.state.index].id);
       console.log("create");
     }
   }, {
@@ -73657,11 +73700,11 @@ function (_Component) {
       /*Output of the result or error msg while editing*/
       this.state.editing ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, this.state.msg) : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Result:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("output", null, this.state.result)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null),
       /*Dropdown list for the base currency, editable as input while editing===true*/
-      this.state.editing ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+      this.state.editing ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Base Currency", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         onChange: this.handleBaseCurrencyEdit,
         type: "text",
         value: this.state.upCurrency.baseCur
-      }) : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "From:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
+      })) : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "From:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
         onChange: this.handleBaseCurrSelection
       }, bDropDownCur)),
       /*Dropdown list for the target currency, editable as input while editing===true*/
@@ -73684,9 +73727,10 @@ function (_Component) {
       }, this.state.rate)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null),
       /*Buttons*/
       this.state.editing ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        id: "delete",
         type: "button",
         name: "Update",
-        onClick: this.onCreate
+        onClick: this.onUpdate
       }, "Update"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "button",
         name: "Done",
@@ -73694,7 +73738,7 @@ function (_Component) {
       }, "Done"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "button",
         name: "Delete",
-        onClick: this.editButton
+        onClick: this.onDelete
       }, "Delete")) : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "button",
         name: "Add",
@@ -73711,6 +73755,38 @@ function (_Component) {
 }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
 
 /* harmony default export */ __webpack_exports__["default"] = (MainForm);
+
+/***/ }),
+
+/***/ "./resources/js/components/funcs/handleTargetCurrSelection.js":
+/*!********************************************************************!*\
+  !*** ./resources/js/components/funcs/handleTargetCurrSelection.js ***!
+  \********************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return handleTargetCurrSelection; });
+function handleTargetCurrSelection(e) {
+  var opts = document.getElementById("target").options;
+  var index = null;
+
+  for (var i = 0; i < opts.length; i++) {
+    if (opts[i].innerText === e.target.value) {
+      index = i;
+      break;
+    }
+  }
+
+  this.setState({
+    tCurrency: e.target.value,
+    rate: this.state.tCurrencies[index].rate,
+    rateChanged: true,
+    index: index
+  });
+  console.log(this.state.tCurrency);
+}
 
 /***/ }),
 

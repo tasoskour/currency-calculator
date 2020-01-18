@@ -27,4 +27,8 @@ Route::get("/targetCurrency/{b_c}","CurrenciesController@getTargetCurrencies");
 //Create new exchange rate and currency
 Route::post("/create","CurrenciesController@ExchangeRateCreate");
 
+//Update exchange rate and/or currency
 Route::put('edit/{exchangeId}','CurrenciesController@update');
+
+//Update exchange rate and/or currency
+Route::delete('delete/{exchangeId}','CurrenciesController@delete');
