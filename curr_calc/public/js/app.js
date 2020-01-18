@@ -73130,7 +73130,8 @@ function (_Component) {
             baseCur: _this2.state.targetCur,
             rate: 1 / _this2.state.rate,
             reverse: false
-          });
+          }); //call create again to create the reverse exchange rate
+
 
           _this2.create();
         }
@@ -73211,194 +73212,27 @@ function (_Component) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 
-
-
-var Form =
-/*#__PURE__*/
-function (_Component) {
-  _inherits(Form, _Component);
-
-  function Form() {
-    var _this;
-
-    _classCallCheck(this, Form);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Form).call(this));
-    _this.state = {
-      value: null,
-      result: null,
-      currencies: [],
-      tCurrencies: [],
-      bCurrency: "",
-      tCurrency: "",
-      rate: null,
-      fetchTarget: false,
-      rateChanged: false
-    };
-    _this.handleBaseCurrSelection = _this.handleBaseCurrSelection.bind(_assertThisInitialized(_this));
-    _this.handleTargetCurrSelection = _this.handleTargetCurrSelection.bind(_assertThisInitialized(_this));
-    _this.getTargetCurrency = _this.getTargetCurrency.bind(_assertThisInitialized(_this));
-    _this.inputHandler = _this.inputHandler.bind(_assertThisInitialized(_this));
-    _this.redirectToCreate = _this.redirectToCreate.bind(_assertThisInitialized(_this));
-    return _this;
-  }
-
-  _createClass(Form, [{
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      var _this2 = this;
-
-      //After the first render, all the currencies being fetched from the api
-      fetch("/api/baseCurrency").then(function (response) {
-        return response.json();
-      }).then(function (currencies) {
-        console.log("DATA:" + currencies[0]); //Fetched currencies are stored in the state
-
-        _this2.setState({
-          currencies: currencies,
-          bCurrency: currencies[0].baseCur,
-          fetchTarget: true
-        });
-      })["catch"](function (error) {
-        console.log("Error1:" + error);
-      });
-    }
-  }, {
-    key: "componentDidUpdate",
-    value: function componentDidUpdate(prevState) {
-      this.getTargetCurrency();
-
-      if (this.state.rateChanged) {
-        var result = this.state.rate * this.state.value;
-        this.setState({
-          result: result,
-          rateChanged: false
-        });
-      }
-    }
-  }, {
-    key: "getTargetCurrency",
-    value: function getTargetCurrency() {
-      var _this3 = this;
-
-      if (this.state.fetchTarget === true) {
-        fetch("/api/targetCurrency/" + this.state.bCurrency).then(function (response) {
-          return response.json();
-        }).then(function (tCurr) {
-          _this3.setState({
-            tCurrencies: tCurr,
-            tCurrency: tCurr[0].targetCur,
-            rate: tCurr[0].rate,
-            fetchTarget: false,
-            rateChanged: true
-          });
-        })["catch"](function (error) {
-          console.log("Error2:" + error);
-        });
-      }
-    }
-  }, {
-    key: "handleBaseCurrSelection",
-    value: function handleBaseCurrSelection(e) {
-      e.preventDefault();
-      this.setState({
-        bCurrency: e.target.value,
-        fetchTarget: true
-      });
-      console.log(this.state.bCurrency);
-      console.log(this.state.rate);
-    }
-  }, {
-    key: "handleTargetCurrSelection",
-    value: function handleTargetCurrSelection(e) {
-      var opts = document.getElementById("target").options;
-      var index = null;
-
-      for (var i = 0; i < opts.length; i++) {
-        if (opts[i].innerText === e.target.value) {
-          index = i;
-          break;
-        }
-      }
-
-      this.setState({
-        tCurrency: e.target.value,
-        rate: this.state.tCurrencies[index].rate,
-        rateChanged: true
-      });
-      console.log(this.state.tCurrency);
-    }
-  }, {
-    key: "inputHandler",
-    value: function inputHandler(e) {
-      e.preventDefault();
-      var result = this.state.rate * e.target.value;
-      this.setState({
-        result: result,
-        value: e.target.value
-      });
-    }
-  }, {
-    key: "redirectToCreate",
-    value: function redirectToCreate(e) {
-      e.preventDefault();
-      this.props.history.push('/create/');
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      /*Option for every different currency using map*/
-      var bDropDownCur = this.state.currencies.map(function (currency) {
-        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
-          key: currency.baseCur,
-          value: currency.baseCur
-        }, currency.baseCur);
-      });
-      var tDropDownCur = this.state.tCurrencies.map(function (currency) {
-        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
-          key: currency.id,
-          value: currency.targetCur
-        }, currency.targetCur);
-      });
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        onChange: this.inputHandler,
-        type: "number"
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("output", {
-        onChange: this.inputHandler
-      }, this.state.rate), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
-        onChange: this.handleBaseCurrSelection
-      }, bDropDownCur), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
-        id: "target",
-        onChange: this.handleTargetCurrSelection
-      }, tDropDownCur), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("output", null, this.state.result), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        type: "button",
-        onClick: this.redirectToCreate
-      }, "Add new currency")));
-    }
-  }]);
-
-  return Form;
-}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+function Form() {
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+    onChange: props.inputHandler,
+    type: "number"
+  }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("output", {
+    onChange: props.inputHandler
+  }, props.rate), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
+    onChange: props.handleBaseCurrSelection
+  }, props.bDropDownCur), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
+    id: "target",
+    onChange: props.handleTargetCurrSelection
+  }, props.tDropDownCur), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("output", null, props.result), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+    type: "button",
+    onClick: props.redirectToCreate
+  }, "Add new currency"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+    type: "button",
+    onClick: props.update
+  }, "Edit current"));
+}
 
 /* harmony default export */ __webpack_exports__["default"] = (Form);
 
@@ -73418,7 +73252,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
-/* harmony import */ var _Form__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Form */ "./resources/js/components/Form.js");
+/* harmony import */ var _MainForm__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./MainForm */ "./resources/js/components/MainForm.js");
 /* harmony import */ var _CreateExchange__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./CreateExchange */ "./resources/js/components/CreateExchange.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -73464,7 +73298,7 @@ function (_Component) {
       }, "Home"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Route"], {
         exact: true,
         path: "/",
-        component: _Form__WEBPACK_IMPORTED_MODULE_3__["default"]
+        component: _MainForm__WEBPACK_IMPORTED_MODULE_3__["default"]
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Route"], {
         exact: true,
         path: "/create",
@@ -73483,6 +73317,400 @@ function (_Component) {
 if (document.getElementById('root')) {
   react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Main, null), document.getElementById('root'));
 }
+
+/***/ }),
+
+/***/ "./resources/js/components/MainForm.js":
+/*!*********************************************!*\
+  !*** ./resources/js/components/MainForm.js ***!
+  \*********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+/* harmony import */ var _Form__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Form */ "./resources/js/components/Form.js");
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+
+
+var MainForm =
+/*#__PURE__*/
+function (_Component) {
+  _inherits(MainForm, _Component);
+
+  function MainForm() {
+    var _this;
+
+    _classCallCheck(this, MainForm);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(MainForm).call(this));
+    _this.state = {
+      value: null,
+      result: null,
+      currencies: [],
+      tCurrencies: [],
+      bCurrency: "",
+      tCurrency: "",
+      rate: null,
+      index: 0,
+      upCurrency: {
+        baseCur: "",
+        targetCur: "",
+        rate: null,
+        reverse: false
+      },
+      fetchTarget: false,
+      rateChanged: false,
+      editing: false,
+      msg: ""
+    };
+    _this.handleBaseCurrSelection = _this.handleBaseCurrSelection.bind(_assertThisInitialized(_this));
+    _this.handleTargetCurrSelection = _this.handleTargetCurrSelection.bind(_assertThisInitialized(_this));
+    _this.getTargetCurrency = _this.getTargetCurrency.bind(_assertThisInitialized(_this));
+    _this.inputHandler = _this.inputHandler.bind(_assertThisInitialized(_this));
+    _this.redirectToCreate = _this.redirectToCreate.bind(_assertThisInitialized(_this));
+    _this.update = _this.update.bind(_assertThisInitialized(_this));
+    _this.handleRateEdit = _this.handleRateEdit.bind(_assertThisInitialized(_this));
+    _this.editButton = _this.editButton.bind(_assertThisInitialized(_this));
+    _this.handleBaseCurrencyEdit = _this.handleBaseCurrencyEdit.bind(_assertThisInitialized(_this));
+    _this.handleTargetCurrencyEdit = _this.handleTargetCurrencyEdit.bind(_assertThisInitialized(_this));
+    _this.getExchangeRate = _this.getExchangeRate.bind(_assertThisInitialized(_this));
+    _this.onCreate = _this.onCreate.bind(_assertThisInitialized(_this));
+    return _this;
+  }
+
+  _createClass(MainForm, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      //After the first render, all the currencies being fetched from the api
+      fetch("/api/baseCurrency").then(function (response) {
+        return response.json();
+      }).then(function (currencies) {
+        console.log("DATA:" + currencies[0]); //Fetched currencies are stored in the state
+
+        _this2.setState({
+          currencies: currencies,
+          bCurrency: currencies[0].baseCur,
+          fetchTarget: true
+        });
+      })["catch"](function (error) {
+        console.log("Error1:" + error);
+      });
+    }
+  }, {
+    key: "componentDidUpdate",
+    value: function componentDidUpdate() {
+      //When state changes and fetchTarget===true the target currency is being fetched
+      if (this.state.fetchTarget === true) {
+        this.getTargetCurrency();
+      } //When exchange rate changes the result is being changed
+
+
+      if (this.state.rateChanged) {
+        var result = this.state.rate * this.state.value;
+        this.setState({
+          result: result,
+          rateChanged: false
+        });
+      }
+    }
+    /*Method to fetch the target currencies for the current base currency and
+    save the complete exchange rate objects to tCurrencies, also establishes the first
+    target currency and exchange rate as current */
+
+  }, {
+    key: "getTargetCurrency",
+    value: function getTargetCurrency() {
+      var _this3 = this;
+
+      fetch("/api/targetCurrency/" + this.state.bCurrency).then(function (response) {
+        return response.json();
+      }).then(function (tCurr) {
+        _this3.setState({
+          tCurrencies: tCurr,
+          tCurrency: tCurr[0].targetCur,
+          rate: tCurr[0].rate,
+          fetchTarget: false,
+          rateChanged: true
+        });
+      })["catch"](function (error) {
+        console.log("Error2:" + error);
+      });
+    }
+  }, {
+    key: "getExchangeRate",
+    value: function getExchangeRate(baseC, targetC) {
+      var _this4 = this;
+
+      fetch("/api/exrate/" + baseC + "/" + targetC).then(function (response) {
+        return response.json();
+      }).then(function (data) {
+        _this4.update(data.id);
+
+        console.log(data.id);
+      })["catch"](function (error) {
+        console.log("Error2:" + error);
+      });
+    }
+  }, {
+    key: "handleBaseCurrSelection",
+    value: function handleBaseCurrSelection(e) {
+      e.preventDefault();
+      this.setState({
+        bCurrency: e.target.value,
+        fetchTarget: true
+      });
+      console.log(this.state.bCurrency);
+      console.log(this.state.rate);
+    }
+  }, {
+    key: "handleTargetCurrSelection",
+    value: function handleTargetCurrSelection(e) {
+      var opts = document.getElementById("target").options;
+      var index = null;
+
+      for (var i = 0; i < opts.length; i++) {
+        if (opts[i].innerText === e.target.value) {
+          index = i;
+          break;
+        }
+      }
+
+      this.setState({
+        tCurrency: e.target.value,
+        rate: this.state.tCurrencies[index].rate,
+        rateChanged: true,
+        index: index
+      });
+      console.log(this.state.tCurrency);
+    }
+  }, {
+    key: "inputHandler",
+    value: function inputHandler(e) {
+      e.preventDefault();
+      var result = this.state.rate * e.target.value;
+      this.setState({
+        result: result,
+        value: e.target.value
+      });
+    }
+  }, {
+    key: "redirectToCreate",
+    value: function redirectToCreate(e) {
+      e.preventDefault();
+      this.props.history.push('/create/');
+    }
+  }, {
+    key: "update",
+    value: function update(id) {
+      var _this5 = this;
+
+      console.log("Index" + this.state.index);
+      var updatedCurrency = JSON.stringify(this.state.upCurrency);
+      console.log(updatedCurrency);
+      console.log(this.state.upCurrency);
+      fetch('/api/edit/' + id, {
+        method: 'put',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: updatedCurrency
+      }).then(function (response) {
+        return response.json();
+      }).then(function (data) {
+        if (_this5.state.upCurrency.reverse) {
+          _this5.setState({
+            upCurrency: _objectSpread({}, _this5.state.upCurrency, {
+              rate: 1 / _this5.state.upCurrency.rate,
+              baseCur: _this5.state.upCurrency.targetCur,
+              targetCur: _this5.state.upCurrency.baseCur,
+              reverse: false
+            })
+          });
+
+          _this5.getExchangeRate(_this5.state.tCurrency, _this5.state.bCurrency);
+        }
+
+        console.log(data);
+      });
+    }
+  }, {
+    key: "handleRateEdit",
+    value: function handleRateEdit(e) {
+      this.setState({
+        upCurrency: _objectSpread({}, this.state.upCurrency, {
+          rate: e.target.value
+        })
+      });
+    }
+  }, {
+    key: "handleBaseCurrencyEdit",
+    value: function handleBaseCurrencyEdit(e) {
+      this.setState({
+        upCurrency: _objectSpread({}, this.state.upCurrency, {
+          baseCur: e.target.value
+        })
+      });
+    }
+  }, {
+    key: "handleTargetCurrencyEdit",
+    value: function handleTargetCurrencyEdit(e) {
+      this.setState({
+        upCurrency: _objectSpread({}, this.state.upCurrency, {
+          targetCur: e.target.value
+        })
+      });
+    }
+  }, {
+    key: "editButton",
+    value: function editButton() {
+      var edit = this.state.editing;
+
+      if (edit) {
+        return window.location.reload();
+      }
+
+      edit = !edit;
+      this.setState({
+        editing: edit
+      });
+
+      if (edit) {
+        var update = {
+          rate: this.state.rate,
+          baseCur: this.state.bCurrency,
+          targetCur: this.state.tCurrency
+        };
+        this.setState({
+          upCurrency: update
+        });
+      }
+    }
+  }, {
+    key: "onCreate",
+    value: function onCreate(e) {
+      e.preventDefault();
+      this.setState({
+        upCurrency: _objectSpread({}, this.state.upCurrency, {
+          reverse: true
+        })
+      });
+      this.update(this.state.tCurrencies[this.state.index].id);
+      console.log("create");
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      /*Option for every base  currency using map*/
+      var bDropDownCur = this.state.currencies.map(function (currency) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+          key: currency.baseCur,
+          value: currency.baseCur
+        }, currency.baseCur);
+      });
+      /*Option for every target currency using map*/
+
+      var tDropDownCur = this.state.tCurrencies.map(function (currency) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+          key: currency.id,
+          value: currency.targetCur
+        }, currency.targetCur);
+      });
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", null,
+      /*Input for the amount which will be converted or h2 while editing*/
+      this.state.editing ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "Edit") : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Value:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        id: "Value",
+        onChange: this.inputHandler,
+        type: "number"
+      })),
+      /*Value of the current exchange rate or input to edit it*/
+      this.state.editing ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        onChange: this.handleRateEdit,
+        type: "number",
+        step: "0.00001",
+        value: this.state.upCurrency.rate
+      }) : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Exchange rate:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("output", {
+        onChange: this.inputHandler
+      }, this.state.rate)),
+      /*Dropdown list for the base currency, editable as input while editing===true*/
+      this.state.editing ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        onChange: this.handleBaseCurrencyEdit,
+        type: "text",
+        value: this.state.upCurrency.baseCur
+      }) : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
+        onChange: this.handleBaseCurrSelection
+      }, bDropDownCur),
+      /*Dropdown list for the target currency, editable as input while editing===true*/
+      this.state.editing ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        onChange: this.handleTargetCurrencyEdit,
+        type: "text",
+        value: this.state.upCurrency.targetCur
+      }) : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
+        id: "target",
+        onChange: this.handleTargetCurrSelection
+      }, tDropDownCur),
+      /*Output of the result or error msg while editing*/
+      this.state.editing ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("output", null, this.state.msg) : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("output", null, this.state.result), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null),
+      /*Buttons*/
+      this.state.editing ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        type: "button",
+        name: "Update",
+        onClick: this.onCreate
+      }, "Update"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        type: "button",
+        name: "Done",
+        onClick: this.editButton
+      }, "Done"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        type: "button",
+        name: "Delete",
+        onClick: this.editButton
+      }, "Delete")) : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        type: "button",
+        name: "Add",
+        onClick: this.redirectToCreate
+      }, "Add new currency"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        type: "button",
+        name: "Edit",
+        onClick: this.editButton
+      }, "Edit current"))));
+    }
+  }]);
+
+  return MainForm;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (MainForm);
 
 /***/ }),
 
