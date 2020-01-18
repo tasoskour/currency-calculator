@@ -73187,7 +73187,7 @@ function (_Component) {
         name: "ExValue",
         type: "number",
         step: "0.00001"
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "button",
         onClick: this.onSubmit
       }, "Submit")));
@@ -73653,7 +73653,26 @@ function (_Component) {
         id: "Value",
         onChange: this.inputHandler,
         type: "number"
-      })),
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null),
+      /*Output of the result or error msg while editing*/
+      this.state.editing ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, this.state.msg) : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Result:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("output", null, this.state.result)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null),
+      /*Dropdown list for the base currency, editable as input while editing===true*/
+      this.state.editing ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        onChange: this.handleBaseCurrencyEdit,
+        type: "text",
+        value: this.state.upCurrency.baseCur
+      }) : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "From:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
+        onChange: this.handleBaseCurrSelection
+      }, bDropDownCur)),
+      /*Dropdown list for the target currency, editable as input while editing===true*/
+      this.state.editing ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        onChange: this.handleTargetCurrencyEdit,
+        type: "text",
+        value: this.state.upCurrency.targetCur
+      }) : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "To:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
+        id: "target",
+        onChange: this.handleTargetCurrSelection
+      }, tDropDownCur)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null),
       /*Value of the current exchange rate or input to edit it*/
       this.state.editing ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         onChange: this.handleRateEdit,
@@ -73662,32 +73681,13 @@ function (_Component) {
         value: this.state.upCurrency.rate
       }) : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Exchange rate:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("output", {
         onChange: this.inputHandler
-      }, this.state.rate)),
-      /*Dropdown list for the base currency, editable as input while editing===true*/
-      this.state.editing ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        onChange: this.handleBaseCurrencyEdit,
-        type: "text",
-        value: this.state.upCurrency.baseCur
-      }) : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
-        onChange: this.handleBaseCurrSelection
-      }, bDropDownCur),
-      /*Dropdown list for the target currency, editable as input while editing===true*/
-      this.state.editing ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        onChange: this.handleTargetCurrencyEdit,
-        type: "text",
-        value: this.state.upCurrency.targetCur
-      }) : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
-        id: "target",
-        onChange: this.handleTargetCurrSelection
-      }, tDropDownCur),
-      /*Output of the result or error msg while editing*/
-      this.state.editing ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("output", null, this.state.msg) : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("output", null, this.state.result), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null),
+      }, this.state.rate)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null),
       /*Buttons*/
       this.state.editing ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "button",
         name: "Update",
         onClick: this.onCreate
-      }, "Update"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+      }, "Update"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "button",
         name: "Done",
         onClick: this.editButton

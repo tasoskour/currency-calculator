@@ -74,6 +74,7 @@ render(){
       <input onChange={this.handleInputFrom} name="From" type="text"/>
       <input onChange={this.handleInputTo} name="To" type="text"/>
       <input onChange={this.handleInputEx} name="ExValue" type="number" step="0.00001"/>
+      <br/>
       <button type="button" onClick={this.onSubmit}>Submit</button>
     </form>
   </div> );

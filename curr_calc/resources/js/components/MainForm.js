@@ -214,8 +214,42 @@ render() {
           Value:
         <input id="Value"  onChange={this.inputHandler} type="number" />
       </label>}
+      <br/>
+      {/*Output of the result or error msg while editing*/
+          this.state.editing ? <h3 >{this.state.msg}</h3>
+          :
+          <label>
+            Result:
+          <output >{this.state.result}</output>
+        </label>}
 
+      <br/>
 
+      {/*Dropdown list for the base currency, editable as input while editing===true*/
+      this.state.editing ?
+      <input onChange={this.handleBaseCurrencyEdit} type="text"
+       value={this.state.upCurrency.baseCur} />
+      :
+      <label>
+          From:
+      <select onChange={this.handleBaseCurrSelection}>
+       {bDropDownCur}
+      </select>
+      </label>}
+
+      {/*Dropdown list for the target currency, editable as input while editing===true*/
+        this.state.editing ?
+        <input onChange={this.handleTargetCurrencyEdit} type="text"
+         value={this.state.upCurrency.targetCur} />
+        :
+        <label>
+            To:
+        <select id="target" onChange={this.handleTargetCurrSelection}>
+          {tDropDownCur}
+        </select>
+      </label>
+      }
+        <br/>
       {/*Value of the current exchange rate or input to edit it*/
         this.state.editing ?
 
@@ -228,28 +262,7 @@ render() {
       </label>
       }
 
-      {/*Dropdown list for the base currency, editable as input while editing===true*/
-      this.state.editing ?
-      <input onChange={this.handleBaseCurrencyEdit} type="text"
-       value={this.state.upCurrency.baseCur} />
-      :
-      <select onChange={this.handleBaseCurrSelection}>
-       {bDropDownCur}
-      </select>}
 
-      {/*Dropdown list for the target currency, editable as input while editing===true*/
-        this.state.editing ?
-        <input onChange={this.handleTargetCurrencyEdit} type="text"
-         value={this.state.upCurrency.targetCur} />
-        :
-        <select id="target" onChange={this.handleTargetCurrSelection}>
-          {tDropDownCur}
-        </select>
-      }
-      {/*Output of the result or error msg while editing*/
-        this.state.editing ?<output >{this.state.msg}</output>
-        :
-        <output >{this.state.result}</output>}
 
 
       <br/>
@@ -258,6 +271,7 @@ render() {
       this.state.editing ?
       <div>
         <button type="button" name="Update" onClick={this.onCreate}>Update</button>
+        <br/>
         <button type="button" name="Done" onClick={this.editButton}>Done</button>
         <button type="button" name="Delete" onClick={this.editButton}>Delete</button>
       </div>
