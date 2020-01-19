@@ -8,13 +8,14 @@ import CreateExchange from "./CreateExchange";
 class Main extends Component {
     render() {
         return (
-
             <Router>
-            <div>
+              <div>
               <Link to="/">Home</Link>
+                {/*Route to home page*/}
                 <Route exact path="/" component={MainForm} />
+                {/*Route to create page*/}
                 <Route exact path="/create" component={CreateExchange} />
-                </div>
+              </div>
             </Router>
         );
     }

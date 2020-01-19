@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
 import {Redirect} from 'react-router-dom';
-import Form from "./Form"
-import handleTargetCurrSelection from "./funcs/handleTargetCurrSelection"
+import Form from "./Form";
+import {handleTargetSelection,handleBaseSelection} from "./funcs/handleSelection";
+import {fetchBaseCurrencies,fetchTargetCurrency,fetchExchangeRate,
+        fetchUpdate,fetchDelete} from "./funcs/fetchFuncs";
+import {handleRateEdit,handleBaseCurrencyEdit,
+        handleTargetCurrencyEdit} from "./funcs/handleEdit";
+import {onEdit,onDelete,onUpdate} from "./funcs/buttonFuncs";
 
 
 class MainForm extends Component{
@@ -10,216 +15,90 @@ constructor(){
   super();
 
   this.state={
+    //Input value
     value:null,
+    //Output result
     result:null,
+    //All base currencies for the dropdown list
     currencies:[],
+    //All target currencies for the currenct base currency
     tCurrencies:[],
+    //Current base currency,target currency and exchange rate
     bCurrency:"",
     tCurrency:"",
     rate:null,
+    //Index of option for the currenct target currency
     index:0,
+    /*The updated currency, reverse makes it possible
+    to update the reverse exchange rate*/
     upCurrency:{baseCur:"",
                 targetCur:"",
                 rate:null,
                 reverse:false},
+  //Booleans
+    //Makes it possible to fetch target currencies
     fetchTarget:false,
+    //Makes it possible to change the result when rate changes
     rateChanged:false,
     editing:false,
+    //Makes it possible to update the reverse exchange rate
+    reverse:false,
+    isLoading:true,
     msg:"",
-    reverse:false
+
   }
 
-this.handleBaseCurrSelection=this.handleBaseCurrSelection.bind(this);
-this.handleTargetCurrSelection=handleTargetCurrSelection.bind(this);
-this.getTargetCurrency=this.getTargetCurrency.bind(this);
+this.handleTargetSelection=handleTargetSelection.bind(this);
+this.handleBaseSelection=handleBaseSelection.bind(this);
+
+this.fetchBaseCurrencies=fetchBaseCurrencies.bind(this);
+this.fetchTargetCurrency=fetchTargetCurrency.bind(this);
+this.fetchExchangeRate=fetchExchangeRate.bind(this);
+this.fetchUpdate=fetchUpdate.bind(this);
+this.fetchDelete=fetchDelete.bind(this);
+
+this.handleBaseCurrencyEdit=handleBaseCurrencyEdit.bind(this);
+this.handleTargetCurrencyEdit=handleTargetCurrencyEdit.bind(this);
+this.handleRateEdit=handleRateEdit.bind(this);
+
+this.onEdit=onEdit.bind(this);
+this.onUpdate=onUpdate.bind(this);
+this.onDelete=onDelete.bind(this);
+
 this.inputHandler=this.inputHandler.bind(this);
 this.redirectToCreate=this.redirectToCreate.bind(this);
-this.update=this.update.bind(this);
-this.handleRateEdit=this.handleRateEdit.bind(this);
-this.editButton=this.editButton.bind(this);
-this.handleBaseCurrencyEdit=this.handleBaseCurrencyEdit.bind(this);
-this.handleTargetCurrencyEdit=this.handleTargetCurrencyEdit.bind(this);
-this.getExchangeRate=  this.getExchangeRate.bind(this);
-this.onUpdate=this.onUpdate.bind(this);
-this.onDelete=this.onDelete.bind(this);
 }
 
 componentDidMount(){
   //After the first render, all the currencies being fetched from the api
-  fetch("/api/baseCurrency")
-    .then(response => {
-      return response.json();
-    })
-    .then(currencies => {
-           console.log("DATA:"+currencies[0]);
-            //Fetched currencies are stored in the state
-            this.setState({ currencies:currencies,bCurrency:currencies[0].baseCur,fetchTarget:true});
-    })
-    .catch(error => {
-      console.log("Error1:"+error);
-    });
+  this.fetchBaseCurrencies();
 }
 
 componentDidUpdate(){
-
-//When state changes and fetchTarget===true the target currency is being fetched
+    //When state changes and fetchTarget===true the target currency is being fetched
     if(this.state.fetchTarget===true){
-    this.getTargetCurrency();}
-
-//When exchange rate changes the result is being changed
+      this.fetchTargetCurrency();}
+    //When exchange rate changes the result is being changed
     if(this.state.rateChanged){
       let result=this.state.rate*this.state.value
       this.setState({result:result,rateChanged:false})
     }
 }
 
-/*Method to fetch the target currencies for the current base currency and
-save the complete exchange rate objects to tCurrencies, also establishes the first
-target currency and exchange rate as current */
-
-getTargetCurrency(){
-  fetch("/api/targetCurrency/"+this.state.bCurrency)
-   .then(response => {
-        return response.json();
-          })
-   .then(tCurr => {
-              this.setState({ tCurrencies:tCurr,
-                              tCurrency:tCurr[0].targetCur,
-                              rate:tCurr[0].rate,
-                              fetchTarget:false,
-                              rateChanged:true});
-          })
-          .catch(error => {
-         console.log("Error2:"+error);});
-}
-
-getExchangeRate(baseC,targetC){
-  fetch("/api/exrate/"+baseC+"/"+targetC)
-   .then(response => {
-        return response.json();
-          })
-   .then(data => {
-     if(this.state.reverse){
-        this.setState({reverse:false})
-         this.delete(data.id)
-         console.log("Delete Id:"+data.id)
-          document.getElementById("delete").disabled=true;
-     }else{  this.update(data.id)
-               console.log(data.id)
-
-               this.setState({upCurrency:{...this.state.upCurrency,
-                           rate:1/this.state.upCurrency.rate,
-                           baseCur:this.state.upCurrency.targetCur,
-                           targetCur:this.state.upCurrency.baseCur},
-                           tCurrency:this.state.upCurrency.baseCur,
-                           bCurrency:this.state.upCurrency.targetCur
-                         })}
-          })
-          .catch(error => {
-         console.log("Error2:"+error);});
-
-}
-
-handleBaseCurrSelection(e){
-  e.preventDefault();
-  this.setState({bCurrency:e.target.value,fetchTarget:true});
-  console.log(this.state.bCurrency);
-  console.log(this.state.rate);
-  }
-
-
-
+//Takes input from user and calculates the output
 inputHandler(e){
   e.preventDefault();
   let result=this.state.rate*e.target.value
   this.setState({result:result,value:e.target.value})
   }
 
+//When create button is pressed redirects to /create
 redirectToCreate(e){
 e.preventDefault();
   this.props.history.push('/create/');
 }
 
-delete(id){
-  fetch( '/api/delete/' +id, { method: 'delete' })
-   .then(response => {
-     console.log(response.status);
-     if(this.state.reverse){
-         this.getExchangeRate(this.state.tCurrency,this.state.bCurrency);
-   }
-       return response.json();
-   })
-   .catch(error => {
-       console.log("ErrorDelete:"+error);
-     });
 
-}
-update(id){
-  console.log("Index"+this.state.index);
-  var updatedCurrency=JSON.stringify(this.state.upCurrency)
-  console.log(updatedCurrency);
-  console.log(this.state.upCurrency)
-  fetch( '/api/edit/' +id, {
-       method:'put',
-       headers: {
-         'Accept': 'application/json',
-         'Content-Type': 'application/json'
-       },
-       body: updatedCurrency
-   })
-   .then(response => {
-     console.log(response);
-       return response.json();
-   })
-   .then( data => {
-     if(this.state.upCurrency.reverse){
-      this.setState({upCurrency:{
-                  rate:1/this.state.upCurrency.rate,
-                  baseCur:this.state.upCurrency.targetCur,
-                  targetCur:this.state.upCurrency.baseCur,
-                  reverse:false}})
-                  this.getExchangeRate(this.state.tCurrency,this.state.bCurrency);}
-   }).catch(error => {
-       console.log("ErrorUpdate:"+error);
-     });
-}
-
-handleRateEdit(e){
-  this.setState({upCurrency: {...this.state.upCurrency,rate:e.target.value}})
-}
-handleBaseCurrencyEdit(e){
-  this.setState({upCurrency: {...this.state.upCurrency,baseCur:e.target.value}})
-}
-handleTargetCurrencyEdit(e){
-  this.setState({upCurrency: {...this.state.upCurrency,targetCur:e.target.value}})
-}
-
-editButton(){
-  let edit=this.state.editing
-  if(edit){
-    return window.location.reload();}
-  edit=!edit
-  this.setState({editing:edit});
-  if(edit){
-  var update={rate:this.state.rate,
-              baseCur:this.state.bCurrency,
-              targetCur:this.state.tCurrency}
-              this.setState({upCurrency: update});
-            }
-
-}
-onUpdate(e){
-  e.preventDefault();
-  this.setState({upCurrency:{...this.state.upCurrency,reverse:true}});
-  this.update(this.state.tCurrencies[this.state.index].id);
-  console.log("create")
-}
-onDelete(e){
-  e.preventDefault();
-  this.setState({reverse:true});
-  this.delete(this.state.tCurrencies[this.state.index].id);
-  console.log("create")
-}
 
 render() {
     /*Option for every base  currency using map*/
@@ -260,7 +139,7 @@ render() {
       :
       <label>
           From:
-      <select onChange={this.handleBaseCurrSelection}>
+      <select onChange={this.handleBaseSelection}>
        {bDropDownCur}
       </select>
       </label>}
@@ -272,7 +151,7 @@ render() {
         :
         <label>
             To:
-        <select id="target" onChange={this.handleTargetCurrSelection}>
+        <select id="target" onChange={this.handleCurrSelection}>
           {tDropDownCur}
         </select>
       </label>
@@ -297,14 +176,14 @@ render() {
       <div>
         <button id="delete" type="button" name="Update" onClick={this.onUpdate}>Update</button>
         <br/>
-        <button type="button" name="Done" onClick={this.editButton}>Done</button>
+        <button type="button" name="Done" onClick={this.onEdit}>Done</button>
         <button type="button" name="Delete" onClick={this.onDelete}>Delete</button>
       </div>
       :
       <div>
 
         <button type="button"  name="Add" onClick={this.redirectToCreate}>Add new currency</button>
-        <button type="button"  name="Edit" onClick={this.editButton}>Edit current</button>
+        <button type="button"  name="Edit" onClick={this.onEdit}>Edit current</button>
       </div>}
     </form>
 

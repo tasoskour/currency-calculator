@@ -73342,14 +73342,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
 /* harmony import */ var _Form__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Form */ "./resources/js/components/Form.js");
-/* harmony import */ var _funcs_handleTargetCurrSelection__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./funcs/handleTargetCurrSelection */ "./resources/js/components/funcs/handleTargetCurrSelection.js");
+/* harmony import */ var _funcs_handleSelection__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./funcs/handleSelection */ "./resources/js/components/funcs/handleSelection.js");
+/* harmony import */ var _funcs_fetchFuncs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./funcs/fetchFuncs */ "./resources/js/components/funcs/fetchFuncs.js");
+/* harmony import */ var _funcs_handleEdit__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./funcs/handleEdit */ "./resources/js/components/funcs/handleEdit.js");
+/* harmony import */ var _funcs_buttonFuncs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./funcs/buttonFuncs */ "./resources/js/components/funcs/buttonFuncs.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -73372,6 +73369,9 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+
+
+
 var MainForm =
 /*#__PURE__*/
 function (_Component) {
@@ -73384,68 +73384,70 @@ function (_Component) {
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(MainForm).call(this));
     _this.state = {
+      //Input value
       value: null,
+      //Output result
       result: null,
+      //All base currencies for the dropdown list
       currencies: [],
+      //All target currencies for the currenct base currency
       tCurrencies: [],
+      //Current base currency,target currency and exchange rate
       bCurrency: "",
       tCurrency: "",
       rate: null,
+      //Index of option for the currenct target currency
       index: 0,
+
+      /*The updated currency, reverse makes it possible
+      to update the reverse exchange rate*/
       upCurrency: {
         baseCur: "",
         targetCur: "",
         rate: null,
         reverse: false
       },
+      //Booleans
+      //Makes it possible to fetch target currencies
       fetchTarget: false,
+      //Makes it possible to change the result when rate changes
       rateChanged: false,
       editing: false,
-      msg: "",
-      reverse: false
+      //Makes it possible to update the reverse exchange rate
+      reverse: false,
+      isLoading: true,
+      msg: ""
     };
-    _this.handleBaseCurrSelection = _this.handleBaseCurrSelection.bind(_assertThisInitialized(_this));
-    _this.handleTargetCurrSelection = _funcs_handleTargetCurrSelection__WEBPACK_IMPORTED_MODULE_3__["default"].bind(_assertThisInitialized(_this));
-    _this.getTargetCurrency = _this.getTargetCurrency.bind(_assertThisInitialized(_this));
+    _this.handleTargetSelection = _funcs_handleSelection__WEBPACK_IMPORTED_MODULE_3__["handleTargetSelection"].bind(_assertThisInitialized(_this));
+    _this.handleBaseSelection = _funcs_handleSelection__WEBPACK_IMPORTED_MODULE_3__["handleBaseSelection"].bind(_assertThisInitialized(_this));
+    _this.fetchBaseCurrencies = _funcs_fetchFuncs__WEBPACK_IMPORTED_MODULE_4__["fetchBaseCurrencies"].bind(_assertThisInitialized(_this));
+    _this.fetchTargetCurrency = _funcs_fetchFuncs__WEBPACK_IMPORTED_MODULE_4__["fetchTargetCurrency"].bind(_assertThisInitialized(_this));
+    _this.fetchExchangeRate = _funcs_fetchFuncs__WEBPACK_IMPORTED_MODULE_4__["fetchExchangeRate"].bind(_assertThisInitialized(_this));
+    _this.fetchUpdate = _funcs_fetchFuncs__WEBPACK_IMPORTED_MODULE_4__["fetchUpdate"].bind(_assertThisInitialized(_this));
+    _this.fetchDelete = _funcs_fetchFuncs__WEBPACK_IMPORTED_MODULE_4__["fetchDelete"].bind(_assertThisInitialized(_this));
+    _this.handleBaseCurrencyEdit = _funcs_handleEdit__WEBPACK_IMPORTED_MODULE_5__["handleBaseCurrencyEdit"].bind(_assertThisInitialized(_this));
+    _this.handleTargetCurrencyEdit = _funcs_handleEdit__WEBPACK_IMPORTED_MODULE_5__["handleTargetCurrencyEdit"].bind(_assertThisInitialized(_this));
+    _this.handleRateEdit = _funcs_handleEdit__WEBPACK_IMPORTED_MODULE_5__["handleRateEdit"].bind(_assertThisInitialized(_this));
+    _this.onEdit = _funcs_buttonFuncs__WEBPACK_IMPORTED_MODULE_6__["onEdit"].bind(_assertThisInitialized(_this));
+    _this.onUpdate = _funcs_buttonFuncs__WEBPACK_IMPORTED_MODULE_6__["onUpdate"].bind(_assertThisInitialized(_this));
+    _this.onDelete = _funcs_buttonFuncs__WEBPACK_IMPORTED_MODULE_6__["onDelete"].bind(_assertThisInitialized(_this));
     _this.inputHandler = _this.inputHandler.bind(_assertThisInitialized(_this));
     _this.redirectToCreate = _this.redirectToCreate.bind(_assertThisInitialized(_this));
-    _this.update = _this.update.bind(_assertThisInitialized(_this));
-    _this.handleRateEdit = _this.handleRateEdit.bind(_assertThisInitialized(_this));
-    _this.editButton = _this.editButton.bind(_assertThisInitialized(_this));
-    _this.handleBaseCurrencyEdit = _this.handleBaseCurrencyEdit.bind(_assertThisInitialized(_this));
-    _this.handleTargetCurrencyEdit = _this.handleTargetCurrencyEdit.bind(_assertThisInitialized(_this));
-    _this.getExchangeRate = _this.getExchangeRate.bind(_assertThisInitialized(_this));
-    _this.onUpdate = _this.onUpdate.bind(_assertThisInitialized(_this));
-    _this.onDelete = _this.onDelete.bind(_assertThisInitialized(_this));
     return _this;
   }
 
   _createClass(MainForm, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      var _this2 = this;
-
       //After the first render, all the currencies being fetched from the api
-      fetch("/api/baseCurrency").then(function (response) {
-        return response.json();
-      }).then(function (currencies) {
-        console.log("DATA:" + currencies[0]); //Fetched currencies are stored in the state
-
-        _this2.setState({
-          currencies: currencies,
-          bCurrency: currencies[0].baseCur,
-          fetchTarget: true
-        });
-      })["catch"](function (error) {
-        console.log("Error1:" + error);
-      });
+      this.fetchBaseCurrencies();
     }
   }, {
     key: "componentDidUpdate",
     value: function componentDidUpdate() {
       //When state changes and fetchTarget===true the target currency is being fetched
       if (this.state.fetchTarget === true) {
-        this.getTargetCurrency();
+        this.fetchTargetCurrency();
       } //When exchange rate changes the result is being changed
 
 
@@ -73456,77 +73458,8 @@ function (_Component) {
           rateChanged: false
         });
       }
-    }
-    /*Method to fetch the target currencies for the current base currency and
-    save the complete exchange rate objects to tCurrencies, also establishes the first
-    target currency and exchange rate as current */
+    } //Takes input from user and calculates the output
 
-  }, {
-    key: "getTargetCurrency",
-    value: function getTargetCurrency() {
-      var _this3 = this;
-
-      fetch("/api/targetCurrency/" + this.state.bCurrency).then(function (response) {
-        return response.json();
-      }).then(function (tCurr) {
-        _this3.setState({
-          tCurrencies: tCurr,
-          tCurrency: tCurr[0].targetCur,
-          rate: tCurr[0].rate,
-          fetchTarget: false,
-          rateChanged: true
-        });
-      })["catch"](function (error) {
-        console.log("Error2:" + error);
-      });
-    }
-  }, {
-    key: "getExchangeRate",
-    value: function getExchangeRate(baseC, targetC) {
-      var _this4 = this;
-
-      fetch("/api/exrate/" + baseC + "/" + targetC).then(function (response) {
-        return response.json();
-      }).then(function (data) {
-        if (_this4.state.reverse) {
-          _this4.setState({
-            reverse: false
-          });
-
-          _this4["delete"](data.id);
-
-          console.log("Delete Id:" + data.id);
-          document.getElementById("delete").disabled = true;
-        } else {
-          _this4.update(data.id);
-
-          console.log(data.id);
-
-          _this4.setState({
-            upCurrency: _objectSpread({}, _this4.state.upCurrency, {
-              rate: 1 / _this4.state.upCurrency.rate,
-              baseCur: _this4.state.upCurrency.targetCur,
-              targetCur: _this4.state.upCurrency.baseCur
-            }),
-            tCurrency: _this4.state.upCurrency.baseCur,
-            bCurrency: _this4.state.upCurrency.targetCur
-          });
-        }
-      })["catch"](function (error) {
-        console.log("Error2:" + error);
-      });
-    }
-  }, {
-    key: "handleBaseCurrSelection",
-    value: function handleBaseCurrSelection(e) {
-      e.preventDefault();
-      this.setState({
-        bCurrency: e.target.value,
-        fetchTarget: true
-      });
-      console.log(this.state.bCurrency);
-      console.log(this.state.rate);
-    }
   }, {
     key: "inputHandler",
     value: function inputHandler(e) {
@@ -73536,141 +73469,13 @@ function (_Component) {
         result: result,
         value: e.target.value
       });
-    }
+    } //When create button is pressed redirects to /create
+
   }, {
     key: "redirectToCreate",
     value: function redirectToCreate(e) {
       e.preventDefault();
       this.props.history.push('/create/');
-    }
-  }, {
-    key: "delete",
-    value: function _delete(id) {
-      var _this5 = this;
-
-      fetch('/api/delete/' + id, {
-        method: 'delete'
-      }).then(function (response) {
-        console.log(response.status);
-
-        if (_this5.state.reverse) {
-          _this5.getExchangeRate(_this5.state.tCurrency, _this5.state.bCurrency);
-        }
-
-        return response.json();
-      })["catch"](function (error) {
-        console.log("ErrorDelete:" + error);
-      });
-    }
-  }, {
-    key: "update",
-    value: function update(id) {
-      var _this6 = this;
-
-      console.log("Index" + this.state.index);
-      var updatedCurrency = JSON.stringify(this.state.upCurrency);
-      console.log(updatedCurrency);
-      console.log(this.state.upCurrency);
-      fetch('/api/edit/' + id, {
-        method: 'put',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: updatedCurrency
-      }).then(function (response) {
-        console.log(response);
-        return response.json();
-      }).then(function (data) {
-        if (_this6.state.upCurrency.reverse) {
-          _this6.setState({
-            upCurrency: {
-              rate: 1 / _this6.state.upCurrency.rate,
-              baseCur: _this6.state.upCurrency.targetCur,
-              targetCur: _this6.state.upCurrency.baseCur,
-              reverse: false
-            }
-          });
-
-          _this6.getExchangeRate(_this6.state.tCurrency, _this6.state.bCurrency);
-        }
-      })["catch"](function (error) {
-        console.log("ErrorUpdate:" + error);
-      });
-    }
-  }, {
-    key: "handleRateEdit",
-    value: function handleRateEdit(e) {
-      this.setState({
-        upCurrency: _objectSpread({}, this.state.upCurrency, {
-          rate: e.target.value
-        })
-      });
-    }
-  }, {
-    key: "handleBaseCurrencyEdit",
-    value: function handleBaseCurrencyEdit(e) {
-      this.setState({
-        upCurrency: _objectSpread({}, this.state.upCurrency, {
-          baseCur: e.target.value
-        })
-      });
-    }
-  }, {
-    key: "handleTargetCurrencyEdit",
-    value: function handleTargetCurrencyEdit(e) {
-      this.setState({
-        upCurrency: _objectSpread({}, this.state.upCurrency, {
-          targetCur: e.target.value
-        })
-      });
-    }
-  }, {
-    key: "editButton",
-    value: function editButton() {
-      var edit = this.state.editing;
-
-      if (edit) {
-        return window.location.reload();
-      }
-
-      edit = !edit;
-      this.setState({
-        editing: edit
-      });
-
-      if (edit) {
-        var update = {
-          rate: this.state.rate,
-          baseCur: this.state.bCurrency,
-          targetCur: this.state.tCurrency
-        };
-        this.setState({
-          upCurrency: update
-        });
-      }
-    }
-  }, {
-    key: "onUpdate",
-    value: function onUpdate(e) {
-      e.preventDefault();
-      this.setState({
-        upCurrency: _objectSpread({}, this.state.upCurrency, {
-          reverse: true
-        })
-      });
-      this.update(this.state.tCurrencies[this.state.index].id);
-      console.log("create");
-    }
-  }, {
-    key: "onDelete",
-    value: function onDelete(e) {
-      e.preventDefault();
-      this.setState({
-        reverse: true
-      });
-      this["delete"](this.state.tCurrencies[this.state.index].id);
-      console.log("create");
     }
   }, {
     key: "render",
@@ -73705,7 +73510,7 @@ function (_Component) {
         type: "text",
         value: this.state.upCurrency.baseCur
       })) : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "From:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
-        onChange: this.handleBaseCurrSelection
+        onChange: this.handleBaseSelection
       }, bDropDownCur)),
       /*Dropdown list for the target currency, editable as input while editing===true*/
       this.state.editing ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
@@ -73714,7 +73519,7 @@ function (_Component) {
         value: this.state.upCurrency.targetCur
       }) : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "To:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
         id: "target",
-        onChange: this.handleTargetCurrSelection
+        onChange: this.handleCurrSelection
       }, tDropDownCur)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null),
       /*Value of the current exchange rate or input to edit it*/
       this.state.editing ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
@@ -73734,7 +73539,7 @@ function (_Component) {
       }, "Update"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "button",
         name: "Done",
-        onClick: this.editButton
+        onClick: this.onEdit
       }, "Done"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "button",
         name: "Delete",
@@ -73746,7 +73551,7 @@ function (_Component) {
       }, "Add new currency"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "button",
         name: "Edit",
-        onClick: this.editButton
+        onClick: this.onEdit
       }, "Edit current"))));
     }
   }]);
@@ -73758,17 +73563,280 @@ function (_Component) {
 
 /***/ }),
 
-/***/ "./resources/js/components/funcs/handleTargetCurrSelection.js":
-/*!********************************************************************!*\
-  !*** ./resources/js/components/funcs/handleTargetCurrSelection.js ***!
-  \********************************************************************/
-/*! exports provided: default */
+/***/ "./resources/js/components/funcs/buttonFuncs.js":
+/*!******************************************************!*\
+  !*** ./resources/js/components/funcs/buttonFuncs.js ***!
+  \******************************************************/
+/*! exports provided: onEdit, onUpdate, onDelete */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return handleTargetCurrSelection; });
-function handleTargetCurrSelection(e) {
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "onEdit", function() { return onEdit; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "onUpdate", function() { return onUpdate; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "onDelete", function() { return onDelete; });
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//Activates and deactivates editing, used by "Edit" button and "Done" button
+function onEdit() {
+  var edit = this.state.editing; //If editing is done reloads page
+
+  if (edit) {
+    return window.location.reload();
+  }
+
+  edit = !edit;
+  this.setState({
+    editing: edit
+  });
+  /*If editing becomes true passes the current values to upCurrency
+   and to editing form*/
+
+  if (edit) {
+    var update = {
+      rate: this.state.rate,
+      baseCur: this.state.bCurrency,
+      targetCur: this.state.tCurrency
+    };
+    this.setState({
+      upCurrency: update
+    });
+  }
+} //When clicked updates the current exchange rate and the reverse one
+
+function onUpdate(e) {
+  e.preventDefault();
+  this.setState({
+    upCurrency: _objectSpread({}, this.state.upCurrency, {
+      reverse: true
+    })
+  });
+  this.fetchUpdate(this.state.tCurrencies[this.state.index].id);
+  console.log("create");
+} //When clicked deletes the current exchange rate and the reverse one
+
+function onDelete(e) {
+  e.preventDefault();
+  this.setState({
+    reverse: true
+  });
+  this.fetchDelete(this.state.tCurrencies[this.state.index].id);
+  console.log("create");
+}
+
+/***/ }),
+
+/***/ "./resources/js/components/funcs/fetchFuncs.js":
+/*!*****************************************************!*\
+  !*** ./resources/js/components/funcs/fetchFuncs.js ***!
+  \*****************************************************/
+/*! exports provided: fetchBaseCurrencies, fetchTargetCurrency, fetchExchangeRate, fetchUpdate, fetchDelete */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchBaseCurrencies", function() { return fetchBaseCurrencies; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchTargetCurrency", function() { return fetchTargetCurrency; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchExchangeRate", function() { return fetchExchangeRate; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchUpdate", function() { return fetchUpdate; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchDelete", function() { return fetchDelete; });
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//After the first render, all the currencies being fetched from the api
+function fetchBaseCurrencies() {
+  var _this = this;
+
+  fetch("/api/baseCurrency").then(function (response) {
+    return response.json();
+  }).then(function (currencies) {
+    console.log("DATA:" + currencies[0]);
+    /*Fetched currencies are stored in the state and fetchTarget becomes true so
+    the target currencies will be fetched*/
+
+    _this.setState({
+      currencies: currencies,
+      bCurrency: currencies[0].baseCur,
+      fetchTarget: true
+    });
+  })["catch"](function (error) {
+    console.log("ErrorBaseCurrency:" + error);
+  });
+}
+/*Method to fetch the target currencies for the current base currency and
+save the complete exchange rate objects to tCurrencies, also establishes the first
+target currency and exchange rate as current */
+
+function fetchTargetCurrency() {
+  var _this2 = this;
+
+  fetch("/api/targetCurrency/" + this.state.bCurrency).then(function (response) {
+    return response.json();
+  }).then(function (tCurr) {
+    _this2.setState({
+      tCurrencies: tCurr,
+      tCurrency: tCurr[0].targetCur,
+      rate: tCurr[0].rate,
+      fetchTarget: false,
+      rateChanged: true
+    });
+  })["catch"](function (error) {
+    console.log("ErrorTargetCurrency:" + error);
+  });
+}
+function fetchExchangeRate(baseC, targetC) {
+  var _this3 = this;
+
+  fetch("/api/exrate/" + baseC + "/" + targetC).then(function (response) {
+    return response.json();
+  }).then(function (data) {
+    if (_this3.state.reverse) {
+      _this3.setState({
+        reverse: false
+      });
+
+      _this3.fetchDelete(data.id);
+
+      document.getElementById("delete").disabled = true;
+    } else {
+      _this3.fetchUpdate(data.id);
+
+      _this3.setState({
+        upCurrency: _objectSpread({}, _this3.state.upCurrency, {
+          rate: 1 / _this3.state.upCurrency.rate,
+          baseCur: _this3.state.upCurrency.targetCur,
+          targetCur: _this3.state.upCurrency.baseCur
+        }),
+        tCurrency: _this3.state.upCurrency.baseCur,
+        bCurrency: _this3.state.upCurrency.targetCur
+      });
+    }
+  })["catch"](function (error) {
+    console.log("ErrorGetExRate:" + error);
+  });
+} //Updates current exchange rate and the reverse one using upCurrency
+
+function fetchUpdate(id) {
+  var _this4 = this;
+
+  console.log("Index" + this.state.index);
+  var updatedCurrency = JSON.stringify(this.state.upCurrency);
+  console.log(updatedCurrency);
+  console.log(this.state.upCurrency);
+  fetch('/api/edit/' + id, {
+    method: 'put',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: updatedCurrency
+  }).then(function (response) {
+    console.log(response);
+    return response.json();
+  }).then(function (data) {
+    /*When the current exchange rate is updated, reverses the upCurrency,
+    fetches the reverse id and updates it through fetchExchangeRate.*/
+    if (_this4.state.upCurrency.reverse) {
+      _this4.setState({
+        upCurrency: {
+          rate: 1 / _this4.state.upCurrency.rate,
+          baseCur: _this4.state.upCurrency.targetCur,
+          targetCur: _this4.state.upCurrency.baseCur,
+          reverse: false
+        }
+      });
+
+      _this4.fetchExchangeRate(_this4.state.tCurrency, _this4.state.bCurrency);
+    }
+  })["catch"](function (error) {
+    console.log("ErrorUpdate:" + error);
+  });
+} //Deletes current exchange rate and the reverse through fetchExchangeRate
+
+function fetchDelete(id) {
+  var _this5 = this;
+
+  fetch('/api/delete/' + id, {
+    method: 'delete'
+  }).then(function (response) {
+    console.log(response.status);
+
+    if (_this5.state.reverse) {
+      _this5.fetchExchangeRate(_this5.state.tCurrency, _this5.state.bCurrency);
+    }
+
+    return response.json();
+  })["catch"](function (error) {
+    console.log("ErrorDelete:" + error);
+  });
+}
+
+/***/ }),
+
+/***/ "./resources/js/components/funcs/handleEdit.js":
+/*!*****************************************************!*\
+  !*** ./resources/js/components/funcs/handleEdit.js ***!
+  \*****************************************************/
+/*! exports provided: handleRateEdit, handleBaseCurrencyEdit, handleTargetCurrencyEdit */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "handleRateEdit", function() { return handleRateEdit; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "handleBaseCurrencyEdit", function() { return handleBaseCurrencyEdit; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "handleTargetCurrencyEdit", function() { return handleTargetCurrencyEdit; });
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//Edit fields handlers for editing current exchange rate using upCurrency 
+function handleRateEdit(e) {
+  this.setState({
+    upCurrency: _objectSpread({}, this.state.upCurrency, {
+      rate: e.target.value
+    })
+  });
+}
+function handleBaseCurrencyEdit(e) {
+  this.setState({
+    upCurrency: _objectSpread({}, this.state.upCurrency, {
+      baseCur: e.target.value
+    })
+  });
+}
+function handleTargetCurrencyEdit(e) {
+  this.setState({
+    upCurrency: _objectSpread({}, this.state.upCurrency, {
+      targetCur: e.target.value
+    })
+  });
+}
+
+/***/ }),
+
+/***/ "./resources/js/components/funcs/handleSelection.js":
+/*!**********************************************************!*\
+  !*** ./resources/js/components/funcs/handleSelection.js ***!
+  \**********************************************************/
+/*! exports provided: handleTargetSelection, handleBaseSelection */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "handleTargetSelection", function() { return handleTargetSelection; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "handleBaseSelection", function() { return handleBaseSelection; });
+//Handles the click on the dropdown menu of the target currency
+function handleTargetSelection(e) {
+  //When an option is clicked find its index
   var opts = document.getElementById("target").options;
   var index = null;
 
@@ -73778,6 +73846,9 @@ function handleTargetCurrSelection(e) {
       break;
     }
   }
+  /*Updates state with the clicked target currency as the active one and
+  also changes the rate and saves the index*/
+
 
   this.setState({
     tCurrency: e.target.value,
@@ -73786,6 +73857,19 @@ function handleTargetCurrSelection(e) {
     index: index
   });
   console.log(this.state.tCurrency);
+} //Handles the click on the dropdown menu of the base currency
+
+function handleBaseSelection(e) {
+  e.preventDefault();
+  /*Updates state with the clicked base currency as the active one and
+  enables fetching for the target currency */
+
+  this.setState({
+    bCurrency: e.target.value,
+    fetchTarget: true
+  });
+  console.log(this.state.bCurrency);
+  console.log(this.state.rate);
 }
 
 /***/ }),

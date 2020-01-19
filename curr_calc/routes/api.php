@@ -16,8 +16,10 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
 //Get all currencies
 Route::get("/baseCurrency","CurrenciesController@getBaseCurrencies");
+
 //Get exchange rates for bCur and tCur
 Route::get("/exrate/{b_c}/{t_c}","CurrenciesController@getExRate");
 
@@ -30,5 +32,5 @@ Route::post("/create","CurrenciesController@ExchangeRateCreate");
 //Update exchange rate and/or currency
 Route::put('edit/{exchangeId}','CurrenciesController@update');
 
-//Update exchange rate and/or currency
+//Delete exchange rate and currencies
 Route::delete('delete/{exchangeId}','CurrenciesController@delete');
