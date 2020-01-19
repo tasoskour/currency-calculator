@@ -73183,20 +73183,21 @@ function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Base Currency:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         onChange: this.handleInputFrom,
         name: "From",
         type: "text"
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Target Currency:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         onChange: this.handleInputTo,
         name: "To",
         type: "text"
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Exchange Rate:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         onChange: this.handleInputEx,
         name: "ExValue",
         type: "number",
         step: "0.00001"
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: "createbtn",
         type: "button",
         onClick: this.onSubmit
       }, "Submit"), this.state.msg));
@@ -73207,6 +73208,53 @@ function (_Component) {
 }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
 
 /* harmony default export */ __webpack_exports__["default"] = (CreateExchange);
+
+/***/ }),
+
+/***/ "./resources/js/components/EditForm.js":
+/*!*********************************************!*\
+  !*** ./resources/js/components/EditForm.js ***!
+  \*********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+
+function EditForm(props) {
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Edit"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Base Currency", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+    onChange: props.handleBaseCurrencyEdit,
+    type: "text",
+    value: props.baseCur
+  })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "To:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+    onChange: props.handleTargetCurrencyEdit,
+    type: "text",
+    value: props.targetCur
+  })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Exchange rate:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+    onChange: props.handleRateEdit,
+    type: "number",
+    step: "0.00001",
+    value: props.rate
+  })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+    id: "delete",
+    type: "button",
+    name: "Update",
+    onClick: props.onUpdate
+  }, "Update"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+    type: "button",
+    name: "Done",
+    onClick: props.onEdit
+  }, "Done"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+    type: "button",
+    name: "Delete",
+    onClick: props.onDelete
+  }, "Delete"))));
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (EditForm);
 
 /***/ }),
 
@@ -73223,24 +73271,27 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 
 
-function Form() {
-  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+function Form(props) {
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Amount:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+    id: "Value",
     onChange: props.inputHandler,
     type: "number"
-  }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("output", {
-    onChange: props.inputHandler
-  }, props.rate), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
-    onChange: props.handleBaseCurrSelection
-  }, props.bDropDownCur), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
+  })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Result:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("output", null, props.result)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "From:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
+    onChange: props.handleBaseSelection
+  }, props.bDropDownCur)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "To:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
     id: "target",
-    onChange: props.handleTargetCurrSelection
-  }, props.tDropDownCur), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("output", null, props.result), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+    onChange: props.handleCurrSelection
+  }, props.tDropDownCur)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Exchange rate:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("output", {
+    onChange: props.inputHandler
+  }, props.rate)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
     type: "button",
+    name: "Add",
     onClick: props.redirectToCreate
   }, "Add new currency"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
     type: "button",
-    onClick: props.update
-  }, "Edit current"));
+    name: "Edit",
+    onClick: props.onEdit
+  }, "Edit current"))));
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (Form);
@@ -73342,11 +73393,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
 /* harmony import */ var _Form__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Form */ "./resources/js/components/Form.js");
-/* harmony import */ var _funcs_handleSelection__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./funcs/handleSelection */ "./resources/js/components/funcs/handleSelection.js");
-/* harmony import */ var _funcs_fetchFuncs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./funcs/fetchFuncs */ "./resources/js/components/funcs/fetchFuncs.js");
-/* harmony import */ var _funcs_handleEdit__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./funcs/handleEdit */ "./resources/js/components/funcs/handleEdit.js");
-/* harmony import */ var _funcs_buttonFuncs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./funcs/buttonFuncs */ "./resources/js/components/funcs/buttonFuncs.js");
+/* harmony import */ var _EditForm__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./EditForm */ "./resources/js/components/EditForm.js");
+/* harmony import */ var _funcs_handleSelection__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./funcs/handleSelection */ "./resources/js/components/funcs/handleSelection.js");
+/* harmony import */ var _funcs_fetchFuncs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./funcs/fetchFuncs */ "./resources/js/components/funcs/fetchFuncs.js");
+/* harmony import */ var _funcs_handleEdit__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./funcs/handleEdit */ "./resources/js/components/funcs/handleEdit.js");
+/* harmony import */ var _funcs_buttonFuncs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./funcs/buttonFuncs */ "./resources/js/components/funcs/buttonFuncs.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -73363,6 +73417,7 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
 
 
 
@@ -73412,25 +73467,26 @@ function (_Component) {
       fetchTarget: false,
       //Makes it possible to change the result when rate changes
       rateChanged: false,
+      //Changes form to edit mode
       editing: false,
       //Makes it possible to update the reverse exchange rate
       reverse: false,
       isLoading: true,
       msg: ""
     };
-    _this.handleTargetSelection = _funcs_handleSelection__WEBPACK_IMPORTED_MODULE_3__["handleTargetSelection"].bind(_assertThisInitialized(_this));
-    _this.handleBaseSelection = _funcs_handleSelection__WEBPACK_IMPORTED_MODULE_3__["handleBaseSelection"].bind(_assertThisInitialized(_this));
-    _this.fetchBaseCurrencies = _funcs_fetchFuncs__WEBPACK_IMPORTED_MODULE_4__["fetchBaseCurrencies"].bind(_assertThisInitialized(_this));
-    _this.fetchTargetCurrency = _funcs_fetchFuncs__WEBPACK_IMPORTED_MODULE_4__["fetchTargetCurrency"].bind(_assertThisInitialized(_this));
-    _this.fetchExchangeRate = _funcs_fetchFuncs__WEBPACK_IMPORTED_MODULE_4__["fetchExchangeRate"].bind(_assertThisInitialized(_this));
-    _this.fetchUpdate = _funcs_fetchFuncs__WEBPACK_IMPORTED_MODULE_4__["fetchUpdate"].bind(_assertThisInitialized(_this));
-    _this.fetchDelete = _funcs_fetchFuncs__WEBPACK_IMPORTED_MODULE_4__["fetchDelete"].bind(_assertThisInitialized(_this));
-    _this.handleBaseCurrencyEdit = _funcs_handleEdit__WEBPACK_IMPORTED_MODULE_5__["handleBaseCurrencyEdit"].bind(_assertThisInitialized(_this));
-    _this.handleTargetCurrencyEdit = _funcs_handleEdit__WEBPACK_IMPORTED_MODULE_5__["handleTargetCurrencyEdit"].bind(_assertThisInitialized(_this));
-    _this.handleRateEdit = _funcs_handleEdit__WEBPACK_IMPORTED_MODULE_5__["handleRateEdit"].bind(_assertThisInitialized(_this));
-    _this.onEdit = _funcs_buttonFuncs__WEBPACK_IMPORTED_MODULE_6__["onEdit"].bind(_assertThisInitialized(_this));
-    _this.onUpdate = _funcs_buttonFuncs__WEBPACK_IMPORTED_MODULE_6__["onUpdate"].bind(_assertThisInitialized(_this));
-    _this.onDelete = _funcs_buttonFuncs__WEBPACK_IMPORTED_MODULE_6__["onDelete"].bind(_assertThisInitialized(_this));
+    _this.handleTargetSelection = _funcs_handleSelection__WEBPACK_IMPORTED_MODULE_4__["handleTargetSelection"].bind(_assertThisInitialized(_this));
+    _this.handleBaseSelection = _funcs_handleSelection__WEBPACK_IMPORTED_MODULE_4__["handleBaseSelection"].bind(_assertThisInitialized(_this));
+    _this.fetchBaseCurrencies = _funcs_fetchFuncs__WEBPACK_IMPORTED_MODULE_5__["fetchBaseCurrencies"].bind(_assertThisInitialized(_this));
+    _this.fetchTargetCurrency = _funcs_fetchFuncs__WEBPACK_IMPORTED_MODULE_5__["fetchTargetCurrency"].bind(_assertThisInitialized(_this));
+    _this.fetchExchangeRate = _funcs_fetchFuncs__WEBPACK_IMPORTED_MODULE_5__["fetchExchangeRate"].bind(_assertThisInitialized(_this));
+    _this.fetchUpdate = _funcs_fetchFuncs__WEBPACK_IMPORTED_MODULE_5__["fetchUpdate"].bind(_assertThisInitialized(_this));
+    _this.fetchDelete = _funcs_fetchFuncs__WEBPACK_IMPORTED_MODULE_5__["fetchDelete"].bind(_assertThisInitialized(_this));
+    _this.handleBaseCurrencyEdit = _funcs_handleEdit__WEBPACK_IMPORTED_MODULE_6__["handleBaseCurrencyEdit"].bind(_assertThisInitialized(_this));
+    _this.handleTargetCurrencyEdit = _funcs_handleEdit__WEBPACK_IMPORTED_MODULE_6__["handleTargetCurrencyEdit"].bind(_assertThisInitialized(_this));
+    _this.handleRateEdit = _funcs_handleEdit__WEBPACK_IMPORTED_MODULE_6__["handleRateEdit"].bind(_assertThisInitialized(_this));
+    _this.onEdit = _funcs_buttonFuncs__WEBPACK_IMPORTED_MODULE_7__["onEdit"].bind(_assertThisInitialized(_this));
+    _this.onUpdate = _funcs_buttonFuncs__WEBPACK_IMPORTED_MODULE_7__["onUpdate"].bind(_assertThisInitialized(_this));
+    _this.onDelete = _funcs_buttonFuncs__WEBPACK_IMPORTED_MODULE_7__["onDelete"].bind(_assertThisInitialized(_this));
     _this.inputHandler = _this.inputHandler.bind(_assertThisInitialized(_this));
     _this.redirectToCreate = _this.redirectToCreate.bind(_assertThisInitialized(_this));
     return _this;
@@ -73480,6 +73536,8 @@ function (_Component) {
   }, {
     key: "render",
     value: function render() {
+      var _React$createElement;
+
       /*Option for every base  currency using map*/
       var bDropDownCur = this.state.currencies.map(function (currency) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
@@ -73495,64 +73553,21 @@ function (_Component) {
           value: currency.targetCur
         }, currency.targetCur);
       });
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", null,
-      /*Input for the amount which will be converted or h2 while editing*/
-      this.state.editing ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "Edit") : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Value:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        id: "Value",
-        onChange: this.inputHandler,
-        type: "number"
-      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null),
-      /*Output of the result or error msg while editing*/
-      this.state.editing ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, this.state.msg) : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Result:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("output", null, this.state.result)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null),
-      /*Dropdown list for the base currency, editable as input while editing===true*/
-      this.state.editing ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Base Currency", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        onChange: this.handleBaseCurrencyEdit,
-        type: "text",
-        value: this.state.upCurrency.baseCur
-      })) : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "From:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
-        onChange: this.handleBaseSelection
-      }, bDropDownCur)),
-      /*Dropdown list for the target currency, editable as input while editing===true*/
-      this.state.editing ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        onChange: this.handleTargetCurrencyEdit,
-        type: "text",
-        value: this.state.upCurrency.targetCur
-      }) : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "To:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
-        id: "target",
-        onChange: this.handleCurrSelection
-      }, tDropDownCur)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null),
-      /*Value of the current exchange rate or input to edit it*/
-      this.state.editing ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        onChange: this.handleRateEdit,
-        type: "number",
-        step: "0.00001",
-        value: this.state.upCurrency.rate
-      }) : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Exchange rate:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("output", {
-        onChange: this.inputHandler
-      }, this.state.rate)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null),
-      /*Buttons*/
-      this.state.editing ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        id: "delete",
-        type: "button",
-        name: "Update",
-        onClick: this.onUpdate
-      }, "Update"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        type: "button",
-        name: "Done",
-        onClick: this.onEdit
-      }, "Done"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        type: "button",
-        name: "Delete",
-        onClick: this.onDelete
-      }, "Delete")) : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        type: "button",
-        name: "Add",
-        onClick: this.redirectToCreate
-      }, "Add new currency"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        type: "button",
-        name: "Edit",
-        onClick: this.onEdit
-      }, "Edit current"))));
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, !this.state.editing ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Form__WEBPACK_IMPORTED_MODULE_2__["default"], (_React$createElement = {
+        inputHandler: this.inputHandler,
+        handleBaseSelection: this.handleBaseSelection,
+        handleCurrSelection: this.handleCurrSelection
+      }, _defineProperty(_React$createElement, "inputHandler", this.inputHandler), _defineProperty(_React$createElement, "redirectToCreate", this.redirectToCreate), _defineProperty(_React$createElement, "onEdit", this.onEdit), _defineProperty(_React$createElement, "result", this.state.result), _defineProperty(_React$createElement, "rate", this.state.rate), _defineProperty(_React$createElement, "bDropDownCur", bDropDownCur), _defineProperty(_React$createElement, "tDropDownCur", tDropDownCur), _React$createElement)) : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_EditForm__WEBPACK_IMPORTED_MODULE_3__["default"], {
+        handleBaseCurrencyEdit: this.handleBaseCurrencyEdit,
+        handleTargetCurrencyEdit: this.handleTargetCurrencyEdit,
+        handleRateEdit: this.handleRateEdit,
+        onUpdate: this.onUpdate,
+        onEdit: this.onEdit,
+        onDelete: this.onDelete,
+        baseCur: this.state.upCurrency.baseCur,
+        targetCur: this.state.upCurrency.targetCur,
+        rate: this.state.upCurrency.rate
+      }));
     }
   }]);
 

@@ -1,30 +1,50 @@
 import React from 'react';
 
-function Form() {
-
-
-
+function Form(props) {
 
   return(
-    <form>
-      {/*Input for the amount which will be converted*/}
-      <input  onChange={props.inputHandler} type="number" />
-      <output onChange={props.inputHandler}>{props.rate}</output>
-      {/*Dropdown list for the base currency*/}
-      <select onChange={props.handleBaseCurrSelection}>
-       {props.bDropDownCur}
-      </select>
+    <div>
+      <form>
+          {/*Input for the amount which will be converted */}
+          <label>Amount:
+           <input id="Value"  onChange={props.inputHandler} type="number" />
+          </label>
+        <br/>
 
-      {/*Dropdown list for the target currency*/}
-      <select id="target" onChange={props.handleTargetCurrSelection}>
-        {props.tDropDownCur}
-      </select>
+          {/*Result  */}
+          <label>Result:
+            <output >{props.result}</output>
+          </label>
+        <br/>
 
-      <output >{props.result}</output>
-      <br/>
-      <button type="button" onClick={props.redirectToCreate}>Add new currency</button>
-      <button type="button" onClick={props.update}>Edit current</button>
-    </form>
+          {/*Dropdown list for the base currency*/}
+          <label>From:
+            <select onChange={props.handleBaseSelection}>
+              {props.bDropDownCur}
+            </select>
+          </label>
+
+          {/*Dropdown list for the target currency*/}
+          <label>To:
+            <select id="target" onChange={props.handleCurrSelection}>
+              {props.tDropDownCur}
+            </select>
+          </label>
+        <br/>
+
+          {/*Value of the current exchange rate*/}
+          <label>Exchange rate:
+            <output onChange={props.inputHandler}>{props.rate}</output>
+          </label>
+        <br/>
+
+          {/*Buttons*/}
+          <div>
+            <button type="button"  name="Add" onClick={props.redirectToCreate}>Add new currency</button>
+            <button type="button"  name="Edit" onClick={props.onEdit}>Edit current</button>
+          </div>
+      </form>
+    </div>
 
   )
 }

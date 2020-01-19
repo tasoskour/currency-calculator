@@ -74,11 +74,19 @@ render(){
     return(
   <div>
     <form>
+      <label>Base Currency:
       <input onChange={this.handleInputFrom} name="From" type="text"/>
-      <input onChange={this.handleInputTo} name="To" type="text"/>
-      <input onChange={this.handleInputEx} name="ExValue" type="number" step="0.00001"/>
+      </label>
       <br/>
-      <button type="button" onClick={this.onSubmit}>Submit</button>
+      <label>Target Currency:
+      <input onChange={this.handleInputTo} name="To" type="text"/>
+      </label>
+      <br/>
+      <label>Exchange Rate:
+      <input onChange={this.handleInputEx} name="ExValue" type="number" step="0.00001"/>
+      </label>
+      <br/>
+      <button className="createbtn" type="button" onClick={this.onSubmit}>Submit</button>
       {this.state.msg}
     </form>
   </div> );

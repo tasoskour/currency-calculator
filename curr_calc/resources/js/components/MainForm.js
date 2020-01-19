@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import {Redirect} from 'react-router-dom';
 import Form from "./Form";
+import EditForm from "./EditForm";
+
 import {handleTargetSelection,handleBaseSelection} from "./funcs/handleSelection";
 import {fetchBaseCurrencies,fetchTargetCurrency,fetchExchangeRate,
         fetchUpdate,fetchDelete} from "./funcs/fetchFuncs";
@@ -40,6 +42,7 @@ constructor(){
     fetchTarget:false,
     //Makes it possible to change the result when rate changes
     rateChanged:false,
+    //Changes form to edit mode
     editing:false,
     //Makes it possible to update the reverse exchange rate
     reverse:false,
@@ -110,86 +113,30 @@ render() {
 
   return(
   <div>
-    <form>
-
-      {/*Input for the amount which will be converted or h2 while editing*/
-      this.state.editing ? <h2>Edit</h2>:
-      <label>
-          Value:
-        <input id="Value"  onChange={this.inputHandler} type="number" />
-      </label>}
-      <br/>
-      {/*Output of the result or error msg while editing*/
-          this.state.editing ? <h3 >{this.state.msg}</h3>
-          :
-          <label>
-            Result:
-          <output >{this.state.result}</output>
-        </label>}
-
-      <br/>
-
-      {/*Dropdown list for the base currency, editable as input while editing===true*/
-      this.state.editing ?
-        <label>
-        Base Currency
-      <input onChange={this.handleBaseCurrencyEdit} type="text"
-       value={this.state.upCurrency.baseCur} />
-         </label>
+      {!this.state.editing
+      ?
+      <Form inputHandler={this.inputHandler}
+        handleBaseSelection={this.handleBaseSelection}
+        handleCurrSelection={this.handleCurrSelection}
+        inputHandler={this.inputHandler}
+        redirectToCreate={this.redirectToCreate}
+        onEdit={this.onEdit}
+        result={this.state.result}
+        rate={this.state.rate}
+        bDropDownCur={bDropDownCur}
+        tDropDownCur={tDropDownCur}
+      />
       :
-      <label>
-          From:
-      <select onChange={this.handleBaseSelection}>
-       {bDropDownCur}
-      </select>
-      </label>}
-
-      {/*Dropdown list for the target currency, editable as input while editing===true*/
-        this.state.editing ?
-        <input onChange={this.handleTargetCurrencyEdit} type="text"
-         value={this.state.upCurrency.targetCur} />
-        :
-        <label>
-            To:
-        <select id="target" onChange={this.handleCurrSelection}>
-          {tDropDownCur}
-        </select>
-      </label>
-      }
-        <br/>
-      {/*Value of the current exchange rate or input to edit it*/
-        this.state.editing ?
-
-            <input onChange={this.handleRateEdit} type="number" step="0.00001"
-            value={this.state.upCurrency.rate} />
-              :
-      <label>
-        Exchange rate:
-        <output onChange={this.inputHandler}>{this.state.rate}</output>
-      </label>
-      }
-
-      <br/>
-
-    {/*Buttons*/
-      this.state.editing ?
-      <div>
-        <button id="delete" type="button" name="Update" onClick={this.onUpdate}>Update</button>
-        <br/>
-        <button type="button" name="Done" onClick={this.onEdit}>Done</button>
-        <button type="button" name="Delete" onClick={this.onDelete}>Delete</button>
-      </div>
-      :
-      <div>
-
-        <button type="button"  name="Add" onClick={this.redirectToCreate}>Add new currency</button>
-        <button type="button"  name="Edit" onClick={this.onEdit}>Edit current</button>
-      </div>}
-    </form>
-
-  </div>
-);}
-
+      <EditForm handleBaseCurrencyEdit={this.handleBaseCurrencyEdit}
+        handleTargetCurrencyEdit={this.handleTargetCurrencyEdit}
+        handleRateEdit={this.handleRateEdit}
+        onUpdate={this.onUpdate}
+        onEdit={this.onEdit}
+        onDelete={this.onDelete}
+        baseCur={this.state.upCurrency.baseCur}
+        targetCur={this.state.upCurrency.targetCur}
+        rate={this.state.upCurrency.rate}
+      /> }
+   </div>)}
 }
-
 export default MainForm;
