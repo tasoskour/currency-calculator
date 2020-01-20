@@ -34,6 +34,7 @@ function EditForm(props) {
         <br/>
           <button type="button" name="Done" onClick={props.onEdit}>Done</button>
           <button type="button" name="Delete" onClick={props.onDelete}>Delete</button>
+          <p>{props.dltMsg}</p>
         </div>
       </form>
 

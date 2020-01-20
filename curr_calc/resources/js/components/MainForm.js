@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {Redirect} from 'react-router-dom';
-import Form from "./Form";
-import EditForm from "./EditForm";
+import HomeForm from "./Forms/HomeForm";
+import EditForm from "./Forms/EditForm";
 
 import {handleTargetSelection,handleBaseSelection} from "./funcs/handleSelection";
 import {fetchBaseCurrencies,fetchTargetCurrency,fetchExchangeRate,
@@ -47,23 +47,23 @@ constructor(){
     //Makes it possible to update the reverse exchange rate
     reverse:false,
     isLoading:true,
-    msg:"",
-
+    dltMsg:"",
   }
 
+//./funcs/handleSelection
 this.handleTargetSelection=handleTargetSelection.bind(this);
 this.handleBaseSelection=handleBaseSelection.bind(this);
-
+//./funcs/fetchFuncs
 this.fetchBaseCurrencies=fetchBaseCurrencies.bind(this);
 this.fetchTargetCurrency=fetchTargetCurrency.bind(this);
 this.fetchExchangeRate=fetchExchangeRate.bind(this);
 this.fetchUpdate=fetchUpdate.bind(this);
 this.fetchDelete=fetchDelete.bind(this);
-
+//./funcs/handleEdit
 this.handleBaseCurrencyEdit=handleBaseCurrencyEdit.bind(this);
 this.handleTargetCurrencyEdit=handleTargetCurrencyEdit.bind(this);
 this.handleRateEdit=handleRateEdit.bind(this);
-
+//./funcs/buttonFuncs
 this.onEdit=onEdit.bind(this);
 this.onUpdate=onUpdate.bind(this);
 this.onDelete=onDelete.bind(this);
@@ -110,33 +110,37 @@ render() {
     /*Option for every target currency using map*/
     var tDropDownCur=this.state.tCurrencies.map((currency)=>
       <option key={currency.id} value={currency.targetCur}>{currency.targetCur}</option>)
-
-  return(
-  <div>
-      {!this.state.editing
-      ?
-      <Form inputHandler={this.inputHandler}
-        handleBaseSelection={this.handleBaseSelection}
-        handleCurrSelection={this.handleCurrSelection}
-        inputHandler={this.inputHandler}
-        redirectToCreate={this.redirectToCreate}
-        onEdit={this.onEdit}
-        result={this.state.result}
-        rate={this.state.rate}
-        bDropDownCur={bDropDownCur}
-        tDropDownCur={tDropDownCur}
-      />
-      :
-      <EditForm handleBaseCurrencyEdit={this.handleBaseCurrencyEdit}
-        handleTargetCurrencyEdit={this.handleTargetCurrencyEdit}
-        handleRateEdit={this.handleRateEdit}
-        onUpdate={this.onUpdate}
-        onEdit={this.onEdit}
-        onDelete={this.onDelete}
-        baseCur={this.state.upCurrency.baseCur}
-        targetCur={this.state.upCurrency.targetCur}
-        rate={this.state.upCurrency.rate}
-      /> }
-   </div>)}
+    if(this.state.isLoading){
+      return <h1>Loading...</h1>
+      }
+    else{
+      return(
+      <div>
+          {  !this.state.editing
+                    ?
+          <HomeForm handleTargetSelection={this.handleTargetSelection}
+            handleBaseSelection={this.handleBaseSelection}
+            handleCurrSelection={this.handleCurrSelection}
+            inputHandler={this.inputHandler}
+            redirectToCreate={this.redirectToCreate}
+            onEdit={this.onEdit}
+            result={this.state.result}
+            rate={this.state.rate}
+            bDropDownCur={bDropDownCur}
+            tDropDownCur={tDropDownCur}
+          />
+          :
+          <EditForm handleBaseCurrencyEdit={this.handleBaseCurrencyEdit}
+            handleTargetCurrencyEdit={this.handleTargetCurrencyEdit}
+            handleRateEdit={this.handleRateEdit}
+            onUpdate={this.onUpdate}
+            onEdit={this.onEdit}
+            onDelete={this.onDelete}
+            baseCur={this.state.upCurrency.baseCur}
+            targetCur={this.state.upCurrency.targetCur}
+            rate={this.state.upCurrency.rate}
+            dltMsg={this.state.dltMsg}
+          /> }
+       </div>)}}
 }
 export default MainForm;

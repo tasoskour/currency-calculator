@@ -73056,6 +73056,7 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _funcs_fetchFuncs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./funcs/fetchFuncs */ "./resources/js/components/funcs/fetchFuncs.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -73073,6 +73074,7 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
 
 
 
@@ -73094,7 +73096,7 @@ function (_Component) {
       reverse: true,
       msg: ""
     };
-    _this.create = _this.create.bind(_assertThisInitialized(_this));
+    _this.fetchCreate = _funcs_fetchFuncs__WEBPACK_IMPORTED_MODULE_1__["fetchCreate"].bind(_assertThisInitialized(_this));
     _this.handleInputFrom = _this.handleInputFrom.bind(_assertThisInitialized(_this));
     _this.handleInputTo = _this.handleInputTo.bind(_assertThisInitialized(_this));
     _this.handleInputEx = _this.handleInputEx.bind(_assertThisInitialized(_this));
@@ -73103,54 +73105,6 @@ function (_Component) {
   }
 
   _createClass(CreateExchange, [{
-    key: "create",
-    value: function create() {
-      var _this2 = this;
-
-      /*Convert currency object into a string*/
-      var currString = JSON.stringify(this.state);
-      console.log(currString);
-      /*Fetch API for post request */
-
-      fetch('/api/create/', {
-        method: 'post',
-
-        /* headers*/
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-
-        /*Body headers*/
-        body: currString
-      }).then(function (response) {
-        /*Reverse the state and create the reverse exchange rate*/
-        if (_this2.state.reverse) {
-          _this2.setState({
-            targetCur: _this2.state.baseCur,
-            baseCur: _this2.state.targetCur,
-            rate: 1 / _this2.state.rate,
-            reverse: false
-          }); //call create again to create the reverse exchange rate
-
-
-          _this2.create();
-        }
-
-        if (response.status === 201) {
-          _this2.setState({
-            msg: "Added successfully"
-          });
-
-          console.log("Added successfully");
-        }
-
-        return response.json();
-      })["catch"](function (error) {
-        console.log(error);
-      });
-    }
-  }, {
     key: "handleInputFrom",
     value: function handleInputFrom(e) {
       this.setState({
@@ -73178,7 +73132,7 @@ function (_Component) {
       this.setState({
         reverse: true
       });
-      this.create();
+      this.fetchCreate();
     }
   }, {
     key: "render",
@@ -73200,7 +73154,7 @@ function (_Component) {
         className: "createbtn",
         type: "button",
         onClick: this.onSubmit
-      }, "Submit"), this.state.msg));
+      }, "Submit"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), this.state.msg));
     }
   }]);
 
@@ -73211,10 +73165,10 @@ function (_Component) {
 
 /***/ }),
 
-/***/ "./resources/js/components/EditForm.js":
-/*!*********************************************!*\
-  !*** ./resources/js/components/EditForm.js ***!
-  \*********************************************/
+/***/ "./resources/js/components/Forms/EditForm.js":
+/*!***************************************************!*\
+  !*** ./resources/js/components/Forms/EditForm.js ***!
+  \***************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -73251,17 +73205,17 @@ function EditForm(props) {
     type: "button",
     name: "Delete",
     onClick: props.onDelete
-  }, "Delete"))));
+  }, "Delete"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, props.dltMsg))));
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (EditForm);
 
 /***/ }),
 
-/***/ "./resources/js/components/Form.js":
-/*!*****************************************!*\
-  !*** ./resources/js/components/Form.js ***!
-  \*****************************************/
+/***/ "./resources/js/components/Forms/HomeForm.js":
+/*!***************************************************!*\
+  !*** ./resources/js/components/Forms/HomeForm.js ***!
+  \***************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -73271,7 +73225,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 
 
-function Form(props) {
+function HomeForm(props) {
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Amount:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
     id: "Value",
     onChange: props.inputHandler,
@@ -73280,7 +73234,7 @@ function Form(props) {
     onChange: props.handleBaseSelection
   }, props.bDropDownCur)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "To:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
     id: "target",
-    onChange: props.handleCurrSelection
+    onChange: props.handleTargetSelection
   }, props.tDropDownCur)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Exchange rate:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("output", {
     onChange: props.inputHandler
   }, props.rate)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
@@ -73294,7 +73248,7 @@ function Form(props) {
   }, "Edit current"))));
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (Form);
+/* harmony default export */ __webpack_exports__["default"] = (HomeForm);
 
 /***/ }),
 
@@ -73392,15 +73346,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
-/* harmony import */ var _Form__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Form */ "./resources/js/components/Form.js");
-/* harmony import */ var _EditForm__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./EditForm */ "./resources/js/components/EditForm.js");
+/* harmony import */ var _Forms_HomeForm__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Forms/HomeForm */ "./resources/js/components/Forms/HomeForm.js");
+/* harmony import */ var _Forms_EditForm__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Forms/EditForm */ "./resources/js/components/Forms/EditForm.js");
 /* harmony import */ var _funcs_handleSelection__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./funcs/handleSelection */ "./resources/js/components/funcs/handleSelection.js");
 /* harmony import */ var _funcs_fetchFuncs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./funcs/fetchFuncs */ "./resources/js/components/funcs/fetchFuncs.js");
 /* harmony import */ var _funcs_handleEdit__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./funcs/handleEdit */ "./resources/js/components/funcs/handleEdit.js");
 /* harmony import */ var _funcs_buttonFuncs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./funcs/buttonFuncs */ "./resources/js/components/funcs/buttonFuncs.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -73472,18 +73424,22 @@ function (_Component) {
       //Makes it possible to update the reverse exchange rate
       reverse: false,
       isLoading: true,
-      msg: ""
-    };
+      dltMsg: ""
+    }; //./funcs/handleSelection
+
     _this.handleTargetSelection = _funcs_handleSelection__WEBPACK_IMPORTED_MODULE_4__["handleTargetSelection"].bind(_assertThisInitialized(_this));
-    _this.handleBaseSelection = _funcs_handleSelection__WEBPACK_IMPORTED_MODULE_4__["handleBaseSelection"].bind(_assertThisInitialized(_this));
+    _this.handleBaseSelection = _funcs_handleSelection__WEBPACK_IMPORTED_MODULE_4__["handleBaseSelection"].bind(_assertThisInitialized(_this)); //./funcs/fetchFuncs
+
     _this.fetchBaseCurrencies = _funcs_fetchFuncs__WEBPACK_IMPORTED_MODULE_5__["fetchBaseCurrencies"].bind(_assertThisInitialized(_this));
     _this.fetchTargetCurrency = _funcs_fetchFuncs__WEBPACK_IMPORTED_MODULE_5__["fetchTargetCurrency"].bind(_assertThisInitialized(_this));
     _this.fetchExchangeRate = _funcs_fetchFuncs__WEBPACK_IMPORTED_MODULE_5__["fetchExchangeRate"].bind(_assertThisInitialized(_this));
     _this.fetchUpdate = _funcs_fetchFuncs__WEBPACK_IMPORTED_MODULE_5__["fetchUpdate"].bind(_assertThisInitialized(_this));
-    _this.fetchDelete = _funcs_fetchFuncs__WEBPACK_IMPORTED_MODULE_5__["fetchDelete"].bind(_assertThisInitialized(_this));
+    _this.fetchDelete = _funcs_fetchFuncs__WEBPACK_IMPORTED_MODULE_5__["fetchDelete"].bind(_assertThisInitialized(_this)); //./funcs/handleEdit
+
     _this.handleBaseCurrencyEdit = _funcs_handleEdit__WEBPACK_IMPORTED_MODULE_6__["handleBaseCurrencyEdit"].bind(_assertThisInitialized(_this));
     _this.handleTargetCurrencyEdit = _funcs_handleEdit__WEBPACK_IMPORTED_MODULE_6__["handleTargetCurrencyEdit"].bind(_assertThisInitialized(_this));
-    _this.handleRateEdit = _funcs_handleEdit__WEBPACK_IMPORTED_MODULE_6__["handleRateEdit"].bind(_assertThisInitialized(_this));
+    _this.handleRateEdit = _funcs_handleEdit__WEBPACK_IMPORTED_MODULE_6__["handleRateEdit"].bind(_assertThisInitialized(_this)); //./funcs/buttonFuncs
+
     _this.onEdit = _funcs_buttonFuncs__WEBPACK_IMPORTED_MODULE_7__["onEdit"].bind(_assertThisInitialized(_this));
     _this.onUpdate = _funcs_buttonFuncs__WEBPACK_IMPORTED_MODULE_7__["onUpdate"].bind(_assertThisInitialized(_this));
     _this.onDelete = _funcs_buttonFuncs__WEBPACK_IMPORTED_MODULE_7__["onDelete"].bind(_assertThisInitialized(_this));
@@ -73536,8 +73492,6 @@ function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      var _React$createElement;
-
       /*Option for every base  currency using map*/
       var bDropDownCur = this.state.currencies.map(function (currency) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
@@ -73553,21 +73507,34 @@ function (_Component) {
           value: currency.targetCur
         }, currency.targetCur);
       });
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, !this.state.editing ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Form__WEBPACK_IMPORTED_MODULE_2__["default"], (_React$createElement = {
-        inputHandler: this.inputHandler,
-        handleBaseSelection: this.handleBaseSelection,
-        handleCurrSelection: this.handleCurrSelection
-      }, _defineProperty(_React$createElement, "inputHandler", this.inputHandler), _defineProperty(_React$createElement, "redirectToCreate", this.redirectToCreate), _defineProperty(_React$createElement, "onEdit", this.onEdit), _defineProperty(_React$createElement, "result", this.state.result), _defineProperty(_React$createElement, "rate", this.state.rate), _defineProperty(_React$createElement, "bDropDownCur", bDropDownCur), _defineProperty(_React$createElement, "tDropDownCur", tDropDownCur), _React$createElement)) : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_EditForm__WEBPACK_IMPORTED_MODULE_3__["default"], {
-        handleBaseCurrencyEdit: this.handleBaseCurrencyEdit,
-        handleTargetCurrencyEdit: this.handleTargetCurrencyEdit,
-        handleRateEdit: this.handleRateEdit,
-        onUpdate: this.onUpdate,
-        onEdit: this.onEdit,
-        onDelete: this.onDelete,
-        baseCur: this.state.upCurrency.baseCur,
-        targetCur: this.state.upCurrency.targetCur,
-        rate: this.state.upCurrency.rate
-      }));
+
+      if (this.state.isLoading) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Loading...");
+      } else {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, !this.state.editing ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Forms_HomeForm__WEBPACK_IMPORTED_MODULE_2__["default"], {
+          handleTargetSelection: this.handleTargetSelection,
+          handleBaseSelection: this.handleBaseSelection,
+          handleCurrSelection: this.handleCurrSelection,
+          inputHandler: this.inputHandler,
+          redirectToCreate: this.redirectToCreate,
+          onEdit: this.onEdit,
+          result: this.state.result,
+          rate: this.state.rate,
+          bDropDownCur: bDropDownCur,
+          tDropDownCur: tDropDownCur
+        }) : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Forms_EditForm__WEBPACK_IMPORTED_MODULE_3__["default"], {
+          handleBaseCurrencyEdit: this.handleBaseCurrencyEdit,
+          handleTargetCurrencyEdit: this.handleTargetCurrencyEdit,
+          handleRateEdit: this.handleRateEdit,
+          onUpdate: this.onUpdate,
+          onEdit: this.onEdit,
+          onDelete: this.onDelete,
+          baseCur: this.state.upCurrency.baseCur,
+          targetCur: this.state.upCurrency.targetCur,
+          rate: this.state.upCurrency.rate,
+          dltMsg: this.state.dltMsg
+        }));
+      }
     }
   }]);
 
@@ -73649,7 +73616,7 @@ function onDelete(e) {
 /*!*****************************************************!*\
   !*** ./resources/js/components/funcs/fetchFuncs.js ***!
   \*****************************************************/
-/*! exports provided: fetchBaseCurrencies, fetchTargetCurrency, fetchExchangeRate, fetchUpdate, fetchDelete */
+/*! exports provided: fetchBaseCurrencies, fetchTargetCurrency, fetchExchangeRate, fetchUpdate, fetchDelete, fetchCreate */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -73659,6 +73626,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchExchangeRate", function() { return fetchExchangeRate; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchUpdate", function() { return fetchUpdate; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchDelete", function() { return fetchDelete; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchCreate", function() { return fetchCreate; });
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -73679,7 +73647,8 @@ function fetchBaseCurrencies() {
     _this.setState({
       currencies: currencies,
       bCurrency: currencies[0].baseCur,
-      fetchTarget: true
+      fetchTarget: true,
+      isLoading: false
     });
   })["catch"](function (error) {
     console.log("ErrorBaseCurrency:" + error);
@@ -73706,6 +73675,10 @@ function fetchTargetCurrency() {
     console.log("ErrorTargetCurrency:" + error);
   });
 }
+/*Method to fetch id for given base and target currcy.
+Also calls fetchDelete and fetchUpdate for second time for
+the reverse exchange rates.*/
+
 function fetchExchangeRate(baseC, targetC) {
   var _this3 = this;
 
@@ -73720,15 +73693,16 @@ function fetchExchangeRate(baseC, targetC) {
       _this3.fetchDelete(data.id);
 
       document.getElementById("delete").disabled = true;
-    } else {
+    } else if (_this3.state.upCurrency.reverse) {
       _this3.fetchUpdate(data.id);
 
       _this3.setState({
-        upCurrency: _objectSpread({}, _this3.state.upCurrency, {
+        upCurrency: {
+          reverse: false,
           rate: 1 / _this3.state.upCurrency.rate,
           baseCur: _this3.state.upCurrency.targetCur,
           targetCur: _this3.state.upCurrency.baseCur
-        }),
+        },
         tCurrency: _this3.state.upCurrency.baseCur,
         bCurrency: _this3.state.upCurrency.targetCur
       });
@@ -73741,7 +73715,6 @@ function fetchExchangeRate(baseC, targetC) {
 function fetchUpdate(id) {
   var _this4 = this;
 
-  console.log("Index" + this.state.index);
   var updatedCurrency = JSON.stringify(this.state.upCurrency);
   console.log(updatedCurrency);
   console.log(this.state.upCurrency);
@@ -73753,19 +73726,20 @@ function fetchUpdate(id) {
     },
     body: updatedCurrency
   }).then(function (response) {
-    console.log(response);
+    var resStatus = response.status;
     return response.json();
   }).then(function (data) {
     /*When the current exchange rate is updated, reverses the upCurrency,
     fetches the reverse id and updates it through fetchExchangeRate.*/
+    console.log(data);
+
     if (_this4.state.upCurrency.reverse) {
       _this4.setState({
-        upCurrency: {
+        upCurrency: _objectSpread({}, _this4.state.upCurrency, {
           rate: 1 / _this4.state.upCurrency.rate,
           baseCur: _this4.state.upCurrency.targetCur,
-          targetCur: _this4.state.upCurrency.baseCur,
-          reverse: false
-        }
+          targetCur: _this4.state.upCurrency.baseCur
+        })
       });
 
       _this4.fetchExchangeRate(_this4.state.tCurrency, _this4.state.bCurrency);
@@ -73783,13 +73757,65 @@ function fetchDelete(id) {
   }).then(function (response) {
     console.log(response.status);
 
-    if (_this5.state.reverse) {
+    if (_this5.state.reverse && response.status === 204) {
+      _this5.setState({
+        dltMsg: "Deleted successfully"
+      });
+
       _this5.fetchExchangeRate(_this5.state.tCurrency, _this5.state.bCurrency);
     }
 
     return response.json();
   })["catch"](function (error) {
     console.log("ErrorDelete:" + error);
+  });
+} //Creates new currency exchange rate and the reverse one
+
+function fetchCreate() {
+  var _this6 = this;
+
+  /*Convert currency object into a string*/
+  var currString = JSON.stringify(this.state);
+  console.log(currString);
+  /*Fetch API for post request */
+
+  fetch('/api/create/', {
+    method: 'post',
+
+    /* headers*/
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+
+    /*Body headers*/
+    body: currString
+  }).then(function (response) {
+    console.log("CreateResponse" + response.status);
+    /*Reverses the state and creates the reverse exchange rate*/
+
+    if (response.status === 201) {
+      if (_this6.state.reverse) {
+        _this6.setState({
+          targetCur: _this6.state.baseCur,
+          baseCur: _this6.state.targetCur,
+          rate: 1 / _this6.state.rate,
+          reverse: false,
+          msg: "Added successfully"
+        }); //call fetchCreate again to create the reverse exchange rate
+
+
+        _this6.fetchCreate();
+      }
+    } else {
+      _this6.setState({
+        msg: "Error."
+      });
+    }
+
+    return response.json();
+  })["catch"](function (error) {
+    console.log(error);
   });
 }
 

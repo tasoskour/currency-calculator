@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\ExchangeRate;
+use Illuminate\Support\Facades\Validator;
 
 class CurrenciesController extends Controller
 {
+
 //Get all currencies names
 public function getBaseCurrencies() {
 
@@ -27,22 +29,40 @@ public function getExRate( $b_c,$t_c){
 
 //Create new exchange rate and currency
 public function ExchangeRateCreate(Request $request){
-/*  $this->validate($request, [
-  'baseCur' => 'required|unique:products|max:255',
-  'targetCur' => 'required',
-  'rate' => 'integer'
+  $validator = Validator::make($request->all(), [
+  'baseCur' => 'required|max:25' ,
+  'targetCur' => 'required|max:25',
+  'rate' => 'required|numeric|between:0,99999.999999'
+ ]);
 
-]);*/
-  $exrate = ExchangeRate::create($request->all());
-        return response()->json($exrate, 201);
+   if($validator->fails()){
+            return response($validator->errors()->first(), 422);
+        }
+
+     else{$exrate = ExchangeRate::create($request->all());
+         return response()->json($exrate, 201);}
+
+
 }
-
+//Update existing exchange rate and currencies
 public function update(Request $request,ExchangeRate $exchangeId){
-  $exchangeId->update($request->all());
 
-          return response()->json($exchangeId, 200);
+  $validator = Validator::make($request->all(), [
+  'baseCur' => 'required|max:25' ,
+  'targetCur' => 'required|max:25',
+  'rate' => 'required|numeric|between:0,99999.999999'
+ ]);
+
+   if($validator->fails()){
+            return response($validator->errors()->first(), 422);
+        }
+else{  $exchangeId->update($request->all());
+
+          return response()->json($exchangeId, 200);}
+
 }
 
+//Delete exchange rate by id
 public function delete(ExchangeRate $exchangeId){
   $exchangeId->delete();
           return response()->json($exchangeId, 204);

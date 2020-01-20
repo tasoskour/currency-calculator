@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Form(props) {
+function HomeForm(props) {
 
   return(
     <div>
@@ -26,7 +26,7 @@ function Form(props) {
 
           {/*Dropdown list for the target currency*/}
           <label>To:
-            <select id="target" onChange={props.handleCurrSelection}>
+            <select id="target" onChange={props.handleTargetSelection}>
               {props.tDropDownCur}
             </select>
           </label>
@@ -48,4 +48,4 @@ function Form(props) {
 
   )
 }
-export default Form;
+export default HomeForm;

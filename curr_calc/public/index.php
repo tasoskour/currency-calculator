@@ -8,7 +8,9 @@
  */
 
 define('LARAVEL_START', microtime(true));
-
+/*Method to fetch id for given base and target currcy.
+Also calls fetchDelete and fetchUpdate for second time for
+the reverse exchange rates.*/
 /*
 |--------------------------------------------------------------------------
 | Register The Auto Loader

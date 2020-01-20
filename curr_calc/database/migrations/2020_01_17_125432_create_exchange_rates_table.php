@@ -19,6 +19,7 @@ class CreateExchangeRatesTable extends Migration
         $table->string("baseCur");
         $table->string("targetCur");
         $table->decimal('rate', 15, 5);
+        
 
     });
     }
