@@ -1,28 +1,30 @@
 # currency-calculator
-Currency calculator to convert between most of the global currencies
+Currency calculator to convert between most of the global currencies.
+Edit and adding new currencies is possible.
+Created with Laravel for the backend and React for the frontend.
 
 ## Installation 
 
-clone the repository
+-clone the repository
 
-type cd projectname
+-type cd projectname
 
-type composer install
+-type composer install
 
-type composer update
+-type composer update
 
-copy .env.example to .env
+-copy .env.example to .env
 
-type php artisan key:generateto regenerate secure key
+-type php artisan key:generateto regenerate secure key
 
-set MySQL in .env file :
+ -set MySQL in .env file :
 
-set DB_CONNECTION
+ -set DB_CONNECTION
 
-set DB_DATABASE
+ -set DB_DATABASE
 
-set DB_USERNAME
+ -set DB_USERNAME
 
-set DB_PASSWORD
+ -set DB_PASSWORD
 
 type php artisan migrate --seed to create and populate tables
