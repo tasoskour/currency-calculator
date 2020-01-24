@@ -21,12 +21,11 @@ export function onUpdate(e){
   e.preventDefault();
   this.setState({upCurrency:{...this.state.upCurrency,reverse:true}});
   this.fetchUpdate(this.state.tCurrencies[this.state.index].id);
-  console.log("create")
 }
 //When clicked deletes the current exchange rate and the reverse one
 export function onDelete(e){
   e.preventDefault();
-  this.setState({reverse:true});
+  this.setState({reverseDel:true});
   this.fetchDelete(this.state.tCurrencies[this.state.index].id);
   console.log("create")
 }

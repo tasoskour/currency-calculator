@@ -24,7 +24,7 @@ public function getTargetCurrencies( $b_c){
 //Get target currencies for given base currency
 public function getExRate( $b_c,$t_c){
     $currencies=ExchangeRate::where([['baseCur', $b_c],['targetCur',$t_c]])->first();
-    return   response( $currencies,200);
+    return   response()->json( $currencies,200);
     }
 
 //Create new exchange rate and currency
@@ -32,15 +32,16 @@ public function ExchangeRateCreate(Request $request){
   $validator = Validator::make($request->all(), [
   'baseCur' => 'required|max:25' ,
   'targetCur' => 'required|max:25',
-  'rate' => 'required|numeric|between:0,99999.999999'
+  'rate' => 'required|numeric|between:0,99999.999999',
  ]);
-
    if($validator->fails()){
-            return response($validator->errors()->first(), 422);
+      $messages = $validator->messages();
+            return response()->json($messages->all(),422);
         }
 
      else{$exrate = ExchangeRate::create($request->all());
-         return response()->json($exrate, 201);}
+         return response()->json(["Added successfully"], 201) ;
+       }
 
 
 }
@@ -56,15 +57,16 @@ public function update(Request $request,ExchangeRate $exchangeId){
    if($validator->fails()){
             return response($validator->errors()->first(), 422);
         }
-else{  $exchangeId->update($request->all());
+   else{  $exchangeId->update($request->all());
 
-          return response()->json($exchangeId, 200);}
+          return response()->json($exchangeId,200);}
 
 }
 
 //Delete exchange rate by id
 public function delete(ExchangeRate $exchangeId){
   $exchangeId->delete();
-          return response()->json($exchangeId, 204);
+  $deleteMsg=array("Delete successfully");
+   return $deleteMsg;
 }
 }

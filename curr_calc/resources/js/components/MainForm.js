@@ -45,7 +45,7 @@ constructor(){
     //Changes form to edit mode
     editing:false,
     //Makes it possible to update the reverse exchange rate
-    reverse:false,
+    reverseDel:false,
     isLoading:true,
     dltMsg:"",
   }
@@ -85,6 +85,13 @@ componentDidUpdate(){
     if(this.state.rateChanged){
       let result=this.state.rate*this.state.value
       this.setState({result:result,rateChanged:false})
+    }
+
+    if(this.state.reverseDel){
+      this.fetchExchangeRate(this.state.tCurrency,this.state.bCurrency);
+    }
+    if(this.state.upCurrency.reverse){
+        this.fetchExchangeRate(this.state.tCurrency,this.state.bCurrency);
     }
 }
 

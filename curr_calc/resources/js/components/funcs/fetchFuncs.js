@@ -6,7 +6,6 @@ export  function fetchBaseCurrencies() {
    return response.json();
  })
  .then(currencies => {
-        console.log("DATA:"+currencies[0]);
        /*Fetched currencies are stored in the state and fetchTarget becomes true so
        the target currencies will be fetched*/
        this.setState({ currencies:currencies,bCurrency:currencies[0].baseCur,
@@ -46,8 +45,8 @@ export  function fetchExchangeRate(baseC,targetC){
         return response.json();
    })
    .then(data => {
-     if(this.state.reverse){
-        this.setState({reverse:false})
+     if(this.state.reverseDel){
+        this.setState({reverseDel:false})
         this.fetchDelete(data.id)
         document.getElementById("delete").disabled=true;}
      else if(this.state.upCurrency.reverse){  this.fetchUpdate(data.id)
@@ -67,8 +66,6 @@ export  function fetchExchangeRate(baseC,targetC){
 export  function fetchUpdate(id){
 
   var updatedCurrency=JSON.stringify(this.state.upCurrency)
-  console.log(updatedCurrency);
-  console.log(this.state.upCurrency)
   fetch( '/api/edit/' +id, {
        method:'put',
        headers: {
@@ -85,12 +82,13 @@ export  function fetchUpdate(id){
      fetches the reverse id and updates it through fetchExchangeRate.*/
 
      if(this.state.upCurrency.reverse){
+
       this.setState({upCurrency:{...this.state.upCurrency,
                   rate:1/this.state.upCurrency.rate,
                   baseCur:this.state.upCurrency.targetCur,
                   targetCur:this.state.upCurrency.baseCur,
                   }})
-      this.fetchExchangeRate(this.state.tCurrency,this.state.bCurrency);}
+    }
    })
    .catch(error => {
        console.log("ErrorUpdate:"+error);
@@ -99,19 +97,13 @@ export  function fetchUpdate(id){
 
 //Deletes current exchange rate and the reverse through fetchExchangeRate
 export function fetchDelete(id){
-  fetch( '/api/delete/' +id, { method: 'delete' })
+  fetch( '/api/delete/' +id, {method: 'delete' })
    .then(response => {
-     console.log(response.status);
-     if(this.state.reverse&&response.status===204){
-       this.setState({dltMsg:"Deleted successfully"});
-         this.fetchExchangeRate(this.state.tCurrency,this.state.bCurrency);
-   }
-       return response.json();
-   })
-   .catch(error => {
+     return response.json()})
+     .then(msg =>this.setState({dltMsg:msg}))
+     .catch(error => {
        console.log("ErrorDelete:"+error);
      });
-
 }
 
 //Creates new currency exchange rate and the reverse one
@@ -133,21 +125,25 @@ export function fetchCreate(){
 
    })
   .then(response => {
-     console.log("CreateResponse"+response.status)
+     console.log(response)
    /*Reverses the state and creates the reverse exchange rate*/
    if(response.status===201){
      if(this.state.reverse){
      this.setState({targetCur:this.state.baseCur,
                     baseCur:this.state.targetCur,
                     rate:1/this.state.rate,
-                    reverse:false,
-                  msg:"Added successfully"})
+                    reverse:false})
     //call fetchCreate again to create the reverse exchange rate
      this.fetchCreate();}}
-   else{this.setState({msg:"Error."})}
-     return response.json();
+       return response.json();
+ }).catch(error => {
+  console.log(error)
+  })
+  .then(messages=>{
+    console.log(messages[0])
+    this.setState({msg:messages[0]})
  })
  .catch(error => {
-  console.log(error);
-  });
+  console.log(error)
+  })
 }

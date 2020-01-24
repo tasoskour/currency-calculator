@@ -73422,7 +73422,7 @@ function (_Component) {
       //Changes form to edit mode
       editing: false,
       //Makes it possible to update the reverse exchange rate
-      reverse: false,
+      reverseDel: false,
       isLoading: true,
       dltMsg: ""
     }; //./funcs/handleSelection
@@ -73469,6 +73469,14 @@ function (_Component) {
           result: result,
           rateChanged: false
         });
+      }
+
+      if (this.state.reverseDel) {
+        this.fetchExchangeRate(this.state.tCurrency, this.state.bCurrency);
+      }
+
+      if (this.state.upCurrency.reverse) {
+        this.fetchExchangeRate(this.state.tCurrency, this.state.bCurrency);
       }
     } //Takes input from user and calculates the output
 
@@ -73598,13 +73606,12 @@ function onUpdate(e) {
     })
   });
   this.fetchUpdate(this.state.tCurrencies[this.state.index].id);
-  console.log("create");
 } //When clicked deletes the current exchange rate and the reverse one
 
 function onDelete(e) {
   e.preventDefault();
   this.setState({
-    reverse: true
+    reverseDel: true
   });
   this.fetchDelete(this.state.tCurrencies[this.state.index].id);
   console.log("create");
@@ -73640,10 +73647,8 @@ function fetchBaseCurrencies() {
   fetch("/api/baseCurrency").then(function (response) {
     return response.json();
   }).then(function (currencies) {
-    console.log("DATA:" + currencies[0]);
     /*Fetched currencies are stored in the state and fetchTarget becomes true so
     the target currencies will be fetched*/
-
     _this.setState({
       currencies: currencies,
       bCurrency: currencies[0].baseCur,
@@ -73685,9 +73690,9 @@ function fetchExchangeRate(baseC, targetC) {
   fetch("/api/exrate/" + baseC + "/" + targetC).then(function (response) {
     return response.json();
   }).then(function (data) {
-    if (_this3.state.reverse) {
+    if (_this3.state.reverseDel) {
       _this3.setState({
-        reverse: false
+        reverseDel: false
       });
 
       _this3.fetchDelete(data.id);
@@ -73716,8 +73721,6 @@ function fetchUpdate(id) {
   var _this4 = this;
 
   var updatedCurrency = JSON.stringify(this.state.upCurrency);
-  console.log(updatedCurrency);
-  console.log(this.state.upCurrency);
   fetch('/api/edit/' + id, {
     method: 'put',
     headers: {
@@ -73726,13 +73729,10 @@ function fetchUpdate(id) {
     },
     body: updatedCurrency
   }).then(function (response) {
-    var resStatus = response.status;
     return response.json();
   }).then(function (data) {
     /*When the current exchange rate is updated, reverses the upCurrency,
     fetches the reverse id and updates it through fetchExchangeRate.*/
-    console.log(data);
-
     if (_this4.state.upCurrency.reverse) {
       _this4.setState({
         upCurrency: _objectSpread({}, _this4.state.upCurrency, {
@@ -73741,8 +73741,6 @@ function fetchUpdate(id) {
           targetCur: _this4.state.upCurrency.baseCur
         })
       });
-
-      _this4.fetchExchangeRate(_this4.state.tCurrency, _this4.state.bCurrency);
     }
   })["catch"](function (error) {
     console.log("ErrorUpdate:" + error);
@@ -73756,16 +73754,11 @@ function fetchDelete(id) {
     method: 'delete'
   }).then(function (response) {
     console.log(response.status);
-
-    if (_this5.state.reverse && response.status === 204) {
-      _this5.setState({
-        dltMsg: "Deleted successfully"
-      });
-
-      _this5.fetchExchangeRate(_this5.state.tCurrency, _this5.state.bCurrency);
-    }
-
     return response.json();
+  }).then(function (msg) {
+    return _this5.setState({
+      dltMsg: msg
+    });
   })["catch"](function (error) {
     console.log("ErrorDelete:" + error);
   });
@@ -73791,7 +73784,7 @@ function fetchCreate() {
     /*Body headers*/
     body: currString
   }).then(function (response) {
-    console.log("CreateResponse" + response.status);
+    console.log(response);
     /*Reverses the state and creates the reverse exchange rate*/
 
     if (response.status === 201) {
@@ -73800,20 +73793,23 @@ function fetchCreate() {
           targetCur: _this6.state.baseCur,
           baseCur: _this6.state.targetCur,
           rate: 1 / _this6.state.rate,
-          reverse: false,
-          msg: "Added successfully"
+          reverse: false
         }); //call fetchCreate again to create the reverse exchange rate
 
 
         _this6.fetchCreate();
       }
-    } else {
-      _this6.setState({
-        msg: "Error."
-      });
     }
 
     return response.json();
+  })["catch"](function (error) {
+    console.log(error);
+  }).then(function (messages) {
+    console.log(messages[0]);
+
+    _this6.setState({
+      msg: messages[0]
+    });
   })["catch"](function (error) {
     console.log(error);
   });
