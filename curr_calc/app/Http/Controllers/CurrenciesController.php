@@ -63,10 +63,11 @@ public function update(Request $request,ExchangeRate $exchangeId){
           'required',
           'max:25',
           /*Create only unique combination for target and base currency*/
-          Rule::unique('rates')->where(function ($query) use($request) {
+          Rule::unique('rates')->where(function ($query) use($request,$exchangeId) {
               return $query->where('baseCur', $request->baseCur)
               ->where('targetCur', $request->targetCur)
-              ->where('rate', $request->rate);
+              ->where('id','!=', $exchangeId->id);
+
           }),
       ],
       'targetCur' =>'required||max:25',
