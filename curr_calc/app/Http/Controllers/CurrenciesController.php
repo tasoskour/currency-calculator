@@ -74,11 +74,12 @@ public function update(Request $request,ExchangeRate $exchangeId){
     ]);
 
    if($validator->fails()){
-            return response($validator->errors()->first(), 422);
-        }
+     $messages = $validator->messages();
+           return response()->json($messages->all(),422);
+       }
    else{  $exchangeId->update($request->all());
-
-          return response()->json($exchangeId,200);}
+          $updateMesg=array("Updated successfully");
+          return response()->json($updateMesg,200);}
 
 }
 

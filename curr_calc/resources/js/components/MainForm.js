@@ -47,7 +47,7 @@ constructor(){
     //Makes it possible to update the reverse exchange rate
     reverseDel:false,
     isLoading:true,
-    dltMsg:"",
+    msg:""
   }
 
 //./funcs/handleSelection
@@ -146,7 +146,7 @@ render() {
             baseCur={this.state.upCurrency.baseCur}
             targetCur={this.state.upCurrency.targetCur}
             rate={this.state.upCurrency.rate}
-            dltMsg={this.state.dltMsg}
+            msg={this.state.msg}
           /> }
        </div>)}}
 }

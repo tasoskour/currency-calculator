@@ -75,21 +75,30 @@ export  function fetchUpdate(id){
        body: updatedCurrency
    })
    .then(response => {
-       return response.json();
-   })
-   .then( data => {
-     /*When the current exchange rate is updated, reverses the upCurrency,
-     fetches the reverse id and updates it through fetchExchangeRate.*/
+      console.log(response.ok)
+      if(response.ok){
+      response.json().then( data => {
+           /*When the current exchange rate is updated, reverses the upCurrency,
+           fetches the reverse id and updates it through fetchExchangeRate.*/
+           console.log(data)
+           if(this.state.upCurrency.reverse){
+            this.setState({upCurrency:{...this.state.upCurrency,
+                        rate:1/this.state.upCurrency.rate,
+                        baseCur:this.state.upCurrency.targetCur,
+                        targetCur:this.state.upCurrency.baseCur,
+                      },msg:data[0]})}
+    }).catch(error => {
+          console.log("ErrorUpdate:"+error);
+      })
 
-     if(this.state.upCurrency.reverse){
-
+  }else{  response.json().then(data=>
       this.setState({upCurrency:{...this.state.upCurrency,
-                  rate:1/this.state.upCurrency.rate,
-                  baseCur:this.state.upCurrency.targetCur,
-                  targetCur:this.state.upCurrency.baseCur,
-                  }})
-    }
+                reverse:false,},msg:data[0]}))}
    })
+   .catch(error => {
+        console.log("ErrorUpdate:"+error);
+    })
+
    .catch(error => {
        console.log("ErrorUpdate:"+error);
    });
@@ -100,7 +109,7 @@ export function fetchDelete(id){
   fetch( '/api/delete/' +id, {method: 'delete' })
    .then(response => {
      return response.json()})
-     .then(msg =>this.setState({dltMsg:msg}))
+     .then(msg =>this.setState({msg:msg}))
      .catch(error => {
        console.log("ErrorDelete:"+error);
      });

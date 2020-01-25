@@ -73205,7 +73205,7 @@ function EditForm(props) {
     type: "button",
     name: "Delete",
     onClick: props.onDelete
-  }, "Delete"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, props.dltMsg))));
+  }, "Delete"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, props.msg))));
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (EditForm);
@@ -73424,7 +73424,7 @@ function (_Component) {
       //Makes it possible to update the reverse exchange rate
       reverseDel: false,
       isLoading: true,
-      dltMsg: ""
+      msg: ""
     }; //./funcs/handleSelection
 
     _this.handleTargetSelection = _funcs_handleSelection__WEBPACK_IMPORTED_MODULE_4__["handleTargetSelection"].bind(_assertThisInitialized(_this));
@@ -73540,7 +73540,7 @@ function (_Component) {
           baseCur: this.state.upCurrency.baseCur,
           targetCur: this.state.upCurrency.targetCur,
           rate: this.state.upCurrency.rate,
-          dltMsg: this.state.dltMsg
+          msg: this.state.msg
         }));
       }
     }
@@ -73729,19 +73729,39 @@ function fetchUpdate(id) {
     },
     body: updatedCurrency
   }).then(function (response) {
-    return response.json();
-  }).then(function (data) {
-    /*When the current exchange rate is updated, reverses the upCurrency,
-    fetches the reverse id and updates it through fetchExchangeRate.*/
-    if (_this4.state.upCurrency.reverse) {
-      _this4.setState({
-        upCurrency: _objectSpread({}, _this4.state.upCurrency, {
-          rate: 1 / _this4.state.upCurrency.rate,
-          baseCur: _this4.state.upCurrency.targetCur,
-          targetCur: _this4.state.upCurrency.baseCur
-        })
+    console.log(response.ok);
+
+    if (response.ok) {
+      response.json().then(function (data) {
+        /*When the current exchange rate is updated, reverses the upCurrency,
+        fetches the reverse id and updates it through fetchExchangeRate.*/
+        console.log(data);
+
+        if (_this4.state.upCurrency.reverse) {
+          _this4.setState({
+            upCurrency: _objectSpread({}, _this4.state.upCurrency, {
+              rate: 1 / _this4.state.upCurrency.rate,
+              baseCur: _this4.state.upCurrency.targetCur,
+              targetCur: _this4.state.upCurrency.baseCur
+            }),
+            msg: data[0]
+          });
+        }
+      })["catch"](function (error) {
+        console.log("ErrorUpdate:" + error);
+      });
+    } else {
+      response.json().then(function (data) {
+        return _this4.setState({
+          upCurrency: _objectSpread({}, _this4.state.upCurrency, {
+            reverse: false
+          }),
+          msg: data[0]
+        });
       });
     }
+  })["catch"](function (error) {
+    console.log("ErrorUpdate:" + error);
   })["catch"](function (error) {
     console.log("ErrorUpdate:" + error);
   });
@@ -73756,7 +73776,7 @@ function fetchDelete(id) {
     return response.json();
   }).then(function (msg) {
     return _this5.setState({
-      dltMsg: msg
+      msg: msg
     });
   })["catch"](function (error) {
     console.log("ErrorDelete:" + error);
