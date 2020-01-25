@@ -73753,7 +73753,6 @@ function fetchDelete(id) {
   fetch('/api/delete/' + id, {
     method: 'delete'
   }).then(function (response) {
-    console.log(response.status);
     return response.json();
   }).then(function (msg) {
     return _this5.setState({

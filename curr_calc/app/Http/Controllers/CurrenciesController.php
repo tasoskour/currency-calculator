@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\ExchangeRate;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class CurrenciesController extends Controller
 {
@@ -29,11 +30,22 @@ public function getExRate( $b_c,$t_c){
 
 //Create new exchange rate and currency
 public function ExchangeRateCreate(Request $request){
-  $validator = Validator::make($request->all(), [
-  'baseCur' => 'required|max:25' ,
-  'targetCur' => 'required|max:25',
-  'rate' => 'required|numeric|between:0,99999.999999',
- ]);
+
+$validator = Validator::make($request->all(),[
+    'baseCur' => [
+        'required',
+        'max:25',
+        /*Create only unique combination for target and base currency*/
+        Rule::unique('rates')->where(function ($query) use($request) {
+            return $query->where('baseCur', $request->baseCur)
+            ->where('targetCur', $request->targetCur);
+        }),
+    ],
+    'targetCur' =>'required||max:25',
+    'rate' => 'required|numeric|between:0,99999.999999',
+
+  ]);
+
    if($validator->fails()){
       $messages = $validator->messages();
             return response()->json($messages->all(),422);
@@ -42,17 +54,24 @@ public function ExchangeRateCreate(Request $request){
      else{$exrate = ExchangeRate::create($request->all());
          return response()->json(["Added successfully"], 201) ;
        }
-
-
 }
 //Update existing exchange rate and currencies
 public function update(Request $request,ExchangeRate $exchangeId){
 
-  $validator = Validator::make($request->all(), [
-  'baseCur' => 'required|max:25' ,
-  'targetCur' => 'required|max:25',
-  'rate' => 'required|numeric|between:0,99999.999999'
- ]);
+  $validator = Validator::make($request->all(),[
+      'baseCur' => [
+          'required',
+          'max:25',
+          /*Create only unique combination for target and base currency*/
+          Rule::unique('rates')->where(function ($query) use($request) {
+              return $query->where('baseCur', $request->baseCur)
+              ->where('targetCur', $request->targetCur);
+          }),
+      ],
+      'targetCur' =>'required||max:25',
+      'rate' => 'required|numeric|between:0,99999.999999',
+
+    ]);
 
    if($validator->fails()){
             return response($validator->errors()->first(), 422);
